@@ -4,38 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Globul.org is a platform helping you reconnect with nature, step outside, and disconnect from technology. Join Globul and embrace sustainability.">
-    <meta name="keywords" content="Globul, nature, environment, earth, sustainability, eco-friendly, reconnect with nature, Globul.org, green living, sustainability">
+    <meta name="description" content="Globul.org is a platform dedicated to reconnecting with nature. Join us in embracing sustainability, eco-friendly living, and outdoor adventures.">
+    <meta name="keywords" content="Globul, sustainability, environment, green living, nature, outdoor activities, eco-friendly">
     <meta name="author" content="Globul.org">
     <meta property="og:title" content="Globul.org - Reconnect with Nature and Sustainability">
-    <meta property="og:description" content="Globul.org is a platform designed to help people reconnect with nature and embrace outdoor living. Join the Globul organization today.">
+    <meta property="og:description" content="Globul.org promotes sustainability, nature exploration, and eco-friendly living. Join our mission to make the world a greener place.">
     <meta property="og:image" content="https://globul.org/images/IMG_2019.webp">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://globul.org/">
-    <meta name="robots" content="index, follow"> <!-- Tells search engines to index the page -->
-    <link rel="canonical" href="https://globul.org/"> <!-- Canonical link to avoid duplicate content issues -->
+    <meta name="robots" content="index, follow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#3c9d46">
 
-    <!-- Google Tag (gtag.js) -->
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SNB1WFEM5Y"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-SNB1WFEM5Y');
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SNB1WFEM5Y');
     </script>
 
+    <!-- Title -->
+    <title>Globul.org - Reconnect with Nature and Sustainability</title>
+
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-T25KCNCJ');</script>
-    <!-- End Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'}); var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:''; j.async=true; j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl; f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-T25KCNCJ');</script>
 
     <!-- Favicon -->
     <link rel="icon" href="images/IMG_2019.webp" type="image/png">
-    
-    <!-- Structured Data (Schema.org for Better Search Appearance) -->
+
+    <!-- Structured Data (Schema.org) -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -56,56 +55,78 @@
     }
     </script>
 
-    <title>Globul.org - Reconnect with Nature and Sustainability</title>
+    <!-- External Link -->
+    <link rel="external" href="https://globul.org/external-page" />
 
+    <!-- Styles -->
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #3c9d46; /* Green background */
-            color: white; /* White text */
-            text-align: center;
-            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #3c9d46, #5aa72a);
+            color: white;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden;
         }
         h1 {
             font-size: 3rem;
             margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
         }
         h2 {
             font-size: 2rem;
             margin-top: 20px;
+            font-weight: normal;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
         }
-        p {
-            font-size: 1.5rem;
+        .coming-soon-btn {
+            background-color: #ff6f00;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            color: white;
+            margin-top: 40px;
+            cursor: pointer;
+            border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .coming-soon-btn:hover {
+            background-color: #ff4500;
+            transform: scale(1.05);
         }
         .message {
             margin-top: 20px;
             font-size: 1.2rem;
-            color: #d0f0c0; /* Lighter green */
+            color: #d0f0c0;
         }
         .social-links {
-            margin-top: 20px;
+            margin-top: 30px;
         }
         .social-links a {
             font-size: 2rem;
-            margin: 0 10px;
+            margin: 0 15px;
             color: white;
+            transition: all 0.3s ease;
         }
         .social-links a:hover {
             color: #d0f0c0;
         }
-        /* Add responsiveness */
         @media (max-width: 600px) {
             h1 {
                 font-size: 2.5rem;
             }
-            p {
-                font-size: 1.2rem;
+            h2 {
+                font-size: 1.5rem;
+            }
+            .coming-soon-btn {
+                padding: 12px 25px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -113,20 +134,13 @@
 <body>
     <h1>Globul.org - Reconnect with Nature</h1>
     <h2>Join us in embracing sustainability and outdoor living</h2>
-    <p>Coming Soon</p>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T25KCNCJ"
-        height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
     
+    <button class="coming-soon-btn" onclick="window.location.href='https://globul.org/beta'">
+        Coming Soon - Visit Our Beta
+    </button>
+
     <div class="message">
-        Reconnecting with nature. Step outside and disconnect from the devices around you. The Globul organization is committed to promoting sustainability and eco-friendly practices.
-    </div>
-    
-    <div class="message">
-        Join us at Globul.org, where we encourage everyone to reconnect with nature, embrace outdoor activities, and make the world a greener place. It's time to step away from technology, get outside, and experience the world around you. Globul.org is the organization that will help guide you back to nature.
+        Reconnecting with nature. Step outside and disconnect from technology. Globul.org is committed to promoting sustainability and eco-friendly practices.
     </div>
 
     <div class="social-links">
@@ -140,5 +154,6 @@
             <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/Email_icon.svg" alt="Email" width="40" />
         </a>
     </div>
+
 </body>
 </html>
