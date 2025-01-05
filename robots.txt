@@ -1,1 +1,4 @@
-nature, globul, global
+User-agent: *
+Disallow: /cgi-bin/
+Allow: /images/
+Sitemap: https://globul.org/index.html
