@@ -1,159 +1,221 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Globul.org is a platform dedicated to reconnecting with nature. Join us in embracing sustainability, eco-friendly living, and outdoor adventures.">
-    <meta name="keywords" content="Globul, sustainability, environment, green living, nature, outdoor activities, eco-friendly">
-    <meta name="author" content="Globul.org">
-    <meta property="og:title" content="Globul.org - Reconnect with Nature and Sustainability">
-    <meta property="og:description" content="Globul.org promotes sustainability, nature exploration, and eco-friendly living. Join our mission to make the world a greener place.">
-    <meta property="og:image" content="https://globul.org/images/IMG_2019.webp">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://globul.org/">
-    <meta name="robots" content="index, follow">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#3c9d46">
-
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SNB1WFEM5Y"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-SNB1WFEM5Y');
-    </script>
-
-    <!-- Title -->
-    <title>Globul.org - Reconnect with Nature and Sustainability</title>
-
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'}); var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:''; j.async=true; j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl; f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-T25KCNCJ');</script>
-
-    <!-- Favicon -->
-    <link rel="icon" href="images/IMG_2019.webp" type="image/png">
-
-    <!-- Structured Data (Schema.org) -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Globul.org",
-        "url": "https://globul.org",
-        "logo": "https://globul.org/images/IMG_2019.webp",
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "telephone": "+1-800-123-4567",
-            "contactType": "Customer Service"
-        },
-        "sameAs": [
-            "https://www.facebook.com/Globul.org",
-            "https://www.instagram.com/JoinGlobul",
-            "https://www.tiktok.com/@JoinGlobul"
-        ]
-    }
-    </script>
-
-    <!-- External Link -->
-    <link rel="external" href="https://globul.org/external-page" />
-
-    <!-- Styles -->
+    <title>Globul.org - Making Earth Better</title>
     <style>
         body {
             margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(45deg, #3c9d46, #5aa72a);
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #2ecc71;
             color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             text-align: center;
-            overflow: hidden;
+            line-height: 1.6;
         }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
         h1 {
-            font-size: 3rem;
-            margin: 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+            font-size: 3.5em;
+            margin-bottom: 10px;
         }
-        h2 {
-            font-size: 2rem;
-            margin-top: 20px;
-            font-weight: normal;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+
+        .beta-status {
+            font-size: 1.2em;
+            margin-bottom: 30px;
         }
-        .coming-soon-btn {
-            background-color: #ff6f00;
-            border: none;
+
+        .join-beta {
+            background-color: white;
+            color: #2ecc71;
             padding: 15px 30px;
-            font-size: 1.2rem;
-            color: white;
-            margin-top: 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
             cursor: pointer;
-            border-radius: 50px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
+            margin: 20px 0;
+            transition: transform 0.2s;
         }
-        .coming-soon-btn:hover {
-            background-color: #ff4500;
+
+        .join-beta:hover {
             transform: scale(1.05);
         }
-        .message {
-            margin-top: 20px;
-            font-size: 1.2rem;
-            color: #d0f0c0;
+
+        .socials {
+            margin: 30px 0;
         }
-        .social-links {
-            margin-top: 30px;
-        }
-        .social-links a {
-            font-size: 2rem;
-            margin: 0 15px;
+
+        .socials a {
             color: white;
-            transition: all 0.3s ease;
+            text-decoration: none;
+            margin: 0 15px;
         }
-        .social-links a:hover {
-            color: #d0f0c0;
+
+        .socials a:hover {
+            text-decoration: underline;
         }
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            h2 {
-                font-size: 1.5rem;
-            }
-            .coming-soon-btn {
-                padding: 12px 25px;
-                font-size: 1rem;
-            }
+
+        .read-more-btn, .read-less-btn {
+            background: none;
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+
+        .article {
+            display: none;
+            text-align: left;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .beta-joined {
+            display: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
-    <h1>Globul.org - Reconnect with Nature</h1>
-    <h2>Join us in embracing sustainability and outdoor living</h2>
-    
-    <button class="coming-soon-btn" onclick="window.location.href='https://globul.org/beta'">
-        Coming Soon - Visit Our Beta
-    </button>
+    <div class="container">
+        <h1>Globul.Org</h1>
+        <p class="beta-status">Currently in Beta</p>
+        
+        <button class="join-beta" onclick="window.location.href='/beta'">Join Beta</button>
+        <div class="beta-joined" id="betaJoined">Beta Joined!</div>
 
-    <div class="message">
-        Reconnecting with nature. Step outside and disconnect from technology. Globul.org is committed to promoting sustainability and eco-friendly practices.
+        <div class="socials">
+            <a href="https://tiktok.com/@joinglobul" target="_blank">TikTok: @joinglobul</a>
+            <a href="https://instagram.com/joinglobul" target="_blank">Instagram: joinglobul</a>
+            <a href="https://youtube.com/JoinGlobul" target="_blank">YouTube: JoinGlobul</a>
+            <a href="mailto:Contact@globul.org">Email: Contact@globul.org</a>
+        </div>
+
+        <button class="read-more-btn" onclick="toggleArticle()">Read More</button>
+        
+        <div class="article" id="article">
+            <h2>About Globul</h2>
+            <p>Globul is committed to making a positive impact on our planet and its inhabitants. Our mission revolves around several key initiatives:</p>
+            
+            <h3>Our Vision</h3>
+            <p>We believe in creating a sustainable future by focusing on environmental consciousness and human development. Through our platform, we aim to inspire and facilitate meaningful change in how people interact with their environment and technology.</p>
+            
+            <h3>Future Plans</h3>
+            <ul>
+                <li>Global Education Initiatives: Making quality education accessible worldwide</li>
+                <li>Nonprofit Organization: Establishing a dedicated entity to drive our mission forward</li>
+                <li>Digital Wellness: Helping people maintain a healthy relationship with technology</li>
+                <li>Environmental Impact: Creating lasting positive change for our planet</li>
+            </ul>
+            
+            <button class="read-less-btn" onclick="toggleArticle()">Read Less</button>
+        </div>
     </div>
 
-    <div class="social-links">
-        <a href="https://www.tiktok.com/@JoinGlobul" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/TikTok_logo_2018.svg" alt="TikTok" width="40" />
-        </a>
-        <a href="https://www.instagram.com/JoinGlobul" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" width="40" />
-        </a>
-        <a href="mailto:Contact@globul.org" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/Email_icon.svg" alt="Email" width="40" />
-        </a>
+    <script>
+        function toggleArticle() {
+            const article = document.getElementById('article');
+            article.style.display = article.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Check if beta was joined
+        if (localStorage.getItem('betaJoined')) {
+            document.getElementById('betaJoined').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
+
+<!-- beta.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Globul Beta</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #2ecc71;
+            color: white;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+
+        .notification-btn {
+            background-color: white;
+            color: #2ecc71;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: transform 0.2s;
+        }
+
+        .notification-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .success-message {
+            display: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Globul is in Beta</h1>
+        <p>To get updates, click below to allow notifications. We will not spam.</p>
+        
+        <button class="notification-btn" onclick="requestNotifications()">Allow Notifications</button>
+        
+        <div class="success-message" id="successMessage">
+            Beta Joined, Thanks for Tuning in!
+        </div>
     </div>
 
+    <script>
+        function requestNotifications() {
+            if ('Notification' in window) {
+                Notification.requestPermission().then(function(permission) {
+                    if (permission === 'granted') {
+                        document.getElementById('successMessage').style.display = 'block';
+                        localStorage.setItem('betaJoined', 'true');
+                    }
+                });
+            }
+        }
+    </script>
 </body>
 </html>
