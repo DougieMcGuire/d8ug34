@@ -63,18 +63,24 @@
   <p id="error-message" style="color: red;"></p>
 
   <script>
-    document.getElementById("login-btn").addEventListener("click", () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+    document.getElementById("login-btn").addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
       const errorMessage = document.getElementById("error-message");
 
-      auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
+      try {
+        // Attempt to log in the user
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+
+        if (user) {
+          // Redirect to home page
           window.location.href = "/account/home";
-        })
-        .catch(error => {
-          errorMessage.textContent = error.message;
-        });
+        }
+      } catch (error) {
+        // Show error message if login fails
+        errorMessage.textContent = error.message;
+      }
     });
   </script>
 </body>
