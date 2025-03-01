@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Video Editor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ffmpeg.js/0.10.1/ffmpeg.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        input, button { margin: 10px; padding: 5px; }
+        canvas { display: none; }
+    </style>
+</head>
+<body>
+
+    <h2>Simple Video Editor</h2>
+    <input type="file" id="videoInput" accept="video/*">
+    <br>
+    <video id="videoPlayer" controls width="500"></video>
+    <br>
+
+    <label>Start Time (seconds): </label>
+    <input type="number" id="startTime" min="0" step="1" value="0">
+    <label>End Time (seconds): </label>
+    <input type="number" id="endTime" min="1" step="1" value="10">
+    <br>
+
+    <label>Text Overlay: </label>
+    <input type="text" id="overlayText" placeholder="Enter text">
+    <br>
+
+    <label>Playback Speed: </label>
+    <select id="playbackSpeed">
+        <option value="0.5">0.5x</option>
+        <option value="1" selected>1x (Normal)</option>
+        <option value="1.5">1.5x</option>
+        <option value="2">2x</option>
+    </select>
+    <br>
+
+    <button onclick="applyEdits()">Apply Edits</button>
+    <button onclick="downloadVideo()">Download</button>
+
+    <canvas id="canvas"></canvas>
+
+    <script>
+        let video = document.getElementById("videoPlayer");
+        let inputFile = document.getElementById("videoInput");
+
+        inputFile.addEventListener("change", function(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let objectURL = URL.createObjectURL(file);
+                video.src = objectURL;
+                video.load();
+            }
+        });
+
+        function applyEdits() {
+            let startTime = parseFloat(document.getElementById("startTime").value);
+            let endTime = parseFloat(document.getElementById("endTime").value);
+            let overlayText = document.getElementById("overlayText").value;
+            let speed = parseFloat(document.getElementById("playbackSpeed").value);
+
+            if (endTime <= startTime || startTime < 0) {
+                alert("Invalid trim range.");
+                return;
+            }
+
+            video.currentTime = startTime;
+            video.playbackRate = speed;
+            addTextOverlay(overlayText);
+        }
+
+        function addTextOverlay(text) {
+            let canvas = document.getElementById("canvas");
+            let ctx = canvas.getContext("2d");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            function drawFrame() {
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                ctx.font = "30px Arial";
+                ctx.fillStyle = "white";
+                ctx.fillText(text, 20, 50);
+            }
+
+            video.addEventListener("play", function () {
+                setInterval(drawFrame, 1000 / 30); // 30 FPS
+            });
+        }
+
+        function downloadVideo() {
+            alert("Downloading edited video is not supported in plain HTML. Use a backend with FFmpeg.");
+        }
+    </script>
+
+</body>
+</html>
