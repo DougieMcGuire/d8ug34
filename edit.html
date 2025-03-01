@@ -3,274 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced FFmpeg Video Editor</title>
+    <title>Web Video Editor</title>
     <style>
-        :root {
-            --primary: #3a86ff;
-            --secondary: #8338ec;
-            --success: #06d6a0;
-            --danger: #ef476f;
-            --warning: #ffd166;
-            --dark: #1a1a1a;
-            --light: #f8f9fa;
-            --gray: #6c757d;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
         body {
-            background-color: var(--dark);
-            color: var(--light);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            padding: 1rem;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .editor-container {
-            display: flex;
-            gap: 1rem;
-            height: 70vh;
-            margin-bottom: 1rem;
-        }
-        
-        .sidebar {
-            width: 300px;
-            background-color: rgba(255, 255, 255, 0.05);
+            background: white;
             border-radius: 8px;
-            padding: 1rem;
-            overflow-y: auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
         }
         
-        .main-content {
-            flex: 1;
+        h1, h2 {
+            color: #2c3e50;
+        }
+        
+        .editor-panel {
             display: flex;
-            flex-direction: column;
-            gap: 1rem;
+            flex-wrap: wrap;
+            gap: 20px;
         }
         
         .preview-container {
-            background-color: #000;
             flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
+            min-width: 300px;
         }
         
-        #preview {
-            max-width: 100%;
-            max-height: 100%;
+        .controls-container {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        #videoPreview {
+            width: 100%;
+            max-height: 400px;
+            background: #000;
+            border-radius: 4px;
         }
         
         .timeline {
-            height: 150px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 1rem;
-            overflow-x: auto;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .tracks {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            flex: 1;
-        }
-        
-        .track {
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
+            width: 100%;
+            height: 80px;
+            background: #e0e0e0;
             border-radius: 4px;
+            margin: 15px 0;
             position: relative;
-        }
-        
-        .clip {
-            position: absolute;
-            height: 100%;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            border-radius: 4px;
-            cursor: move;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.8rem;
             overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         
-        .clip-handle {
-            position: absolute;
-            width: 10px;
-            height: 100%;
-            cursor: ew-resize;
+        .timeline-slider {
+            width: 100%;
+            margin-top: 10px;
         }
         
-        .clip-handle.left {
-            left: 0;
-        }
-        
-        .clip-handle.right {
-            right: 0;
-        }
-        
-        .timeline-controls {
+        .trim-controls {
             display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
+            justify-content: space-between;
+            margin-bottom: 15px;
         }
         
-        .btn {
-            background-color: var(--primary);
+        .overlay-item, .subtitle-item, .music-item {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .overlay-preview {
+            width: 50px;
+            height: 30px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        button {
+            background-color: #3498db;
             color: white;
             border: none;
+            padding: 8px 15px;
             border-radius: 4px;
-            padding: 0.5rem 1rem;
             cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.2s;
+            transition: background-color 0.3s;
         }
         
-        .btn:hover {
-            background-color: #2a75ef;
-        }
-        
-        .btn-success {
-            background-color: var(--success);
-        }
-        
-        .btn-success:hover {
-            background-color: #05c591;
-        }
-        
-        .btn-danger {
-            background-color: var(--danger);
-        }
-        
-        .btn-danger:hover {
-            background-color: #e43567;
-        }
-        
-        .panel {
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .panel-title {
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            color: var(--light);
-        }
-        
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--light);
+        button:hover {
+            background-color: #2980b9;
         }
         
         input, select, textarea {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        
+        .panel {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        
+        .subtitle-editor {
             width: 100%;
-            padding: 0.5rem;
-            border-radius: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background-color: rgba(255, 255, 255, 0.05);
-            color: var(--light);
+            height: 100px;
         }
         
-        .media-library {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-        
-        .media-item {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            cursor: pointer;
-            position: relative;
-            aspect-ratio: 16/9;
-        }
-        
-        .media-item img, .media-item video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .media-item-label {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 0.2rem;
-            font-size: 0.7rem;
-            text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .command-output {
-            background-color: #000;
-            color: #0f0;
-            padding: 0.5rem;
-            border-radius: 4px;
-            font-family: monospace;
-            white-space: pre-wrap;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        
-        .tabs {
+        .overlay-controls {
             display: flex;
-            margin-bottom: 1rem;
+            gap: 10px;
+            margin-top: 5px;
         }
         
-        .tab {
-            padding: 0.5rem 1rem;
+        .overlay-item img {
+            max-width: 60px;
+            max-height: 40px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .tab-button {
+            padding: 10px 15px;
+            background: #e0e0e0;
+            border: none;
             cursor: pointer;
-            border-bottom: 2px solid transparent;
         }
         
-        .tab.active {
-            border-bottom: 2px solid var(--primary);
-            color: var(--primary);
+        .tab-button.active {
+            background: #3498db;
+            color: white;
         }
         
         .tab-content {
@@ -281,578 +163,701 @@
             display: block;
         }
         
-        .effects-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 0.5rem;
+        /* For overlay positioning */
+        #videoWrapper {
+            position: relative;
+            width: 100%;
         }
         
-        .effect-item {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            padding: 0.5rem;
-            cursor: pointer;
-            text-align: center;
-            transition: background-color 0.2s;
-        }
-        
-        .effect-item:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-        
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            display: none;
-        }
-        
-        .modal-content {
-            background-color: var(--dark);
-            border-radius: 8px;
-            width: 500px;
-            max-width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 1rem;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .close-btn {
-            background: none;
-            border: none;
-            color: var(--light);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        .loading-indicator {
+        .video-overlay {
             position: absolute;
-            top: 0;
+            z-index: 10;
+            pointer-events: none;
+        }
+        
+        .subtitle-display {
+            position: absolute;
+            bottom: 10%;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
+            width: 100%;
+            text-align: center;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+            font-size: 18px;
+            z-index: 20;
+        }
+        
+        #exportProgress {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin-top: 10px;
             display: none;
         }
         
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-left: 4px solid var(--primary);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .progress-container {
-            width: 80%;
-            background-color: rgba(255, 255, 255, 0.1);
+        #progressBar {
+            height: 100%;
+            background-color: #3498db;
             border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 0.5rem;
-        }
-        
-        .progress-bar {
-            height: 10px;
-            background-color: var(--primary);
             width: 0%;
             transition: width 0.3s;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Advanced FFmpeg Video Editor</h1>
-    </header>
-    
     <div class="container">
-        <div class="editor-container">
-            <div class="sidebar">
+        <h1>Web Video Editor</h1>
+        
+        <div class="editor-panel">
+            <!-- Preview Section -->
+            <div class="preview-container">
                 <div class="panel">
-                    <div class="panel-title">Import Media</div>
-                    <div class="form-group">
-                        <label for="file-input">Select files:</label>
-                        <input type="file" id="file-input" multiple accept="video/*,audio/*,image/*">
+                    <h2>Preview</h2>
+                    <div id="videoWrapper">
+                        <video id="videoPreview" controls>
+                            Your browser does not support the video element.
+                        </video>
+                        <div id="overlayContainer"></div>
+                        <div id="subtitleDisplay" class="subtitle-display"></div>
                     </div>
-                    <button id="import-btn" class="btn">Import</button>
+                    
+                    <div class="timeline">
+                        <div id="timelineVisual"></div>
+                    </div>
+                    
+                    <div class="trim-controls">
+                        <div>
+                            <label for="startTime">Start Time:</label>
+                            <input type="number" id="startTime" min="0" step="0.1" value="0"> sec
+                        </div>
+                        <div>
+                            <label for="endTime">End Time:</label>
+                            <input type="number" id="endTime" min="0" step="0.1" value="10"> sec
+                        </div>
+                        <button id="applyTrim">Apply Trim</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Controls Section -->
+            <div class="controls-container">
+                <div class="panel">
+                    <h2>Media</h2>
+                    <div>
+                        <label for="videoUpload">Upload Video:</label>
+                        <input type="file" id="videoUpload" accept="video/*">
+                    </div>
                 </div>
                 
-                <div class="panel">
-                    <div class="panel-title">Media Library</div>
-                    <div class="media-library" id="media-library">
-                        <!-- Media items will be added here dynamically -->
-                    </div>
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="subtitles">Subtitles</button>
+                    <button class="tab-button" data-tab="overlays">Image Overlays</button>
+                    <button class="tab-button" data-tab="audio">Audio</button>
+                    <button class="tab-button" data-tab="tts">Text to Speech</button>
+                    <button class="tab-button" data-tab="export">Export</button>
                 </div>
                 
-                <div class="panel">
-                    <div class="panel-title">Export</div>
-                    <div class="form-group">
-                        <label for="export-format">Format:</label>
-                        <select id="export-format">
-                            <option value="mp4">MP4 (H.264)</option>
-                            <option value="webm">WebM (VP9)</option>
-                            <option value="gif">GIF</option>
-                            <option value="mov">MOV (ProRes)</option>
+                <!-- Subtitles Tab -->
+                <div id="subtitles" class="tab-content active panel">
+                    <h3>Subtitles</h3>
+                    <div id="subtitlesList">
+                        <!-- Subtitle items will be added here -->
+                    </div>
+                    <div>
+                        <label for="subtitleText">Text:</label>
+                        <textarea id="subtitleText" class="subtitle-editor" placeholder="Enter subtitle text"></textarea>
+                        
+                        <div class="trim-controls">
+                            <div>
+                                <label for="subtitleStart">Start Time:</label>
+                                <input type="number" id="subtitleStart" min="0" step="0.1" value="0"> sec
+                            </div>
+                            <div>
+                                <label for="subtitleEnd">End Time:</label>
+                                <input type="number" id="subtitleEnd" min="0" step="0.1" value="3"> sec
+                            </div>
+                        </div>
+                        
+                        <label for="subtitleColor">Color:</label>
+                        <input type="color" id="subtitleColor" value="#ffffff">
+                        
+                        <label for="subtitleSize">Size:</label>
+                        <select id="subtitleSize">
+                            <option value="16px">Small</option>
+                            <option value="20px" selected>Medium</option>
+                            <option value="24px">Large</option>
                         </select>
+                        
+                        <button id="addSubtitle">Add Subtitle</button>
                     </div>
-                    <div class="form-group">
-                        <label for="export-quality">Quality:</label>
-                        <select id="export-quality">
-                            <option value="high">High</option>
-                            <option value="medium">Medium</option>
+                </div>
+                
+                <!-- Overlays Tab -->
+                <div id="overlays" class="tab-content panel">
+                    <h3>Image Overlays</h3>
+                    <div id="overlaysList">
+                        <!-- Overlay items will be added here -->
+                    </div>
+                    <div>
+                        <label for="overlayUpload">Upload Image:</label>
+                        <input type="file" id="overlayUpload" accept="image/*">
+                        
+                        <div class="overlay-controls">
+                            <div>
+                                <label for="overlayX">X Position (%):</label>
+                                <input type="number" id="overlayX" min="0" max="100" value="10">
+                            </div>
+                            <div>
+                                <label for="overlayY">Y Position (%):</label>
+                                <input type="number" id="overlayY" min="0" max="100" value="10">
+                            </div>
+                        </div>
+                        
+                        <div class="overlay-controls">
+                            <div>
+                                <label for="overlayWidth">Width (%):</label>
+                                <input type="number" id="overlayWidth" min="5" max="100" value="20">
+                            </div>
+                            <div>
+                                <label for="overlayStart">Start Time:</label>
+                                <input type="number" id="overlayStart" min="0" step="0.1" value="0"> sec
+                            </div>
+                            <div>
+                                <label for="overlayEnd">End Time:</label>
+                                <input type="number" id="overlayEnd" min="0" step="0.1" value="5"> sec
+                            </div>
+                        </div>
+                        
+                        <button id="addOverlay">Add Overlay</button>
+                    </div>
+                </div>
+                
+                <!-- Audio Tab -->
+                <div id="audio" class="tab-content panel">
+                    <h3>Background Music</h3>
+                    <div id="musicList">
+                        <!-- Music items will be added here -->
+                    </div>
+                    <div>
+                        <label for="musicUpload">Upload Music:</label>
+                        <input type="file" id="musicUpload" accept="audio/*">
+                        
+                        <div class="trim-controls">
+                            <div>
+                                <label for="musicVolume">Volume:</label>
+                                <input type="range" id="musicVolume" min="0" max="1" step="0.1" value="0.5">
+                            </div>
+                            <div>
+                                <label for="musicStart">Start Time:</label>
+                                <input type="number" id="musicStart" min="0" step="0.1" value="0"> sec
+                            </div>
+                        </div>
+                        
+                        <button id="addMusic">Add Music</button>
+                    </div>
+                </div>
+                
+                <!-- Text to Speech Tab -->
+                <div id="tts" class="tab-content panel">
+                    <h3>Text to Speech</h3>
+                    <div id="ttsList">
+                        <!-- TTS items will be added here -->
+                    </div>
+                    <div>
+                        <label for="ttsText">Text to Speak:</label>
+                        <textarea id="ttsText" class="subtitle-editor" placeholder="Enter text to be spoken"></textarea>
+                        
+                        <label for="ttsVoice">Voice:</label>
+                        <select id="ttsVoice">
+                            <!-- Voices will be added by JavaScript -->
+                        </select>
+                        
+                        <div class="trim-controls">
+                            <div>
+                                <label for="ttsStart">Start Time:</label>
+                                <input type="number" id="ttsStart" min="0" step="0.1" value="0"> sec
+                            </div>
+                            <div>
+                                <label for="ttsVolume">Volume:</label>
+                                <input type="range" id="ttsVolume" min="0" max="1" step="0.1" value="1">
+                            </div>
+                        </div>
+                        
+                        <button id="previewTts">Preview</button>
+                        <button id="addTts">Add to Video</button>
+                    </div>
+                </div>
+                
+                <!-- Export Tab -->
+                <div id="export" class="tab-content panel">
+                    <h3>Export Video</h3>
+                    <div>
+                        <label for="exportFormat">Format:</label>
+                        <select id="exportFormat">
+                            <option value="mp4">MP4</option>
+                            <option value="webm">WebM</option>
+                        </select>
+                        
+                        <label for="exportQuality">Quality:</label>
+                        <select id="exportQuality">
                             <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
                         </select>
-                    </div>
-                    <button id="export-btn" class="btn btn-success">Export Video</button>
-                </div>
-            </div>
-            
-            <div class="main-content">
-                <div class="preview-container">
-                    <video id="preview" controls></video>
-                    <div class="loading-indicator" id="loading-indicator">
-                        <div class="spinner"></div>
-                        <div id="loading-status">Processing...</div>
-                        <div class="progress-container">
-                            <div class="progress-bar" id="progress-bar"></div>
+                        
+                        <button id="exportVideo">Export Video</button>
+                        
+                        <div id="exportProgress">
+                            <div id="progressBar"></div>
                         </div>
+                        
+                        <div id="downloadLinkContainer" style="margin-top: 15px;"></div>
                     </div>
-                </div>
-                
-                <div class="timeline">
-                    <div class="tracks" id="timeline-tracks">
-                        <div class="track" id="video-track">
-                            <!-- Clips will be added here dynamically -->
-                        </div>
-                        <div class="track" id="audio-track">
-                            <!-- Clips will be added here dynamically -->
-                        </div>
-                    </div>
-                    <div class="timeline-controls">
-                        <button id="play-btn" class="btn">Play</button>
-                        <button id="cut-btn" class="btn">Cut</button>
-                        <button id="delete-btn" class="btn btn-danger">Delete</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="tabs">
-            <div class="tab active" data-tab="edit">Edit</div>
-            <div class="tab" data-tab="effects">Effects</div>
-            <div class="tab" data-tab="audio">Audio</div>
-            <div class="tab" data-tab="text">Text</div>
-            <div class="tab" data-tab="advanced">Advanced</div>
-        </div>
-        
-        <div class="tab-content active" id="edit-tab">
-            <div class="panel">
-                <div class="panel-title">Basic Editing</div>
-                <div class="form-group">
-                    <label for="trim-start">Trim Start (seconds):</label>
-                    <input type="number" id="trim-start" min="0" step="0.1" value="0">
-                </div>
-                <div class="form-group">
-                    <label for="trim-end">Trim End (seconds):</label>
-                    <input type="number" id="trim-end" min="0" step="0.1" value="10">
-                </div>
-                <button id="apply-trim-btn" class="btn">Apply Trim</button>
-                
-                <div class="form-group">
-                    <label for="playback-speed">Playback Speed:</label>
-                    <input type="range" id="playback-speed" min="0.25" max="4" step="0.25" value="1">
-                    <span id="speed-value">1x</span>
-                </div>
-                <button id="apply-speed-btn" class="btn">Apply Speed</button>
-            </div>
-        </div>
-        
-        <div class="tab-content" id="effects-tab">
-            <div class="panel">
-                <div class="panel-title">Video Effects</div>
-                <div class="effects-list">
-                    <div class="effect-item" data-effect="blur">Blur</div>
-                    <div class="effect-item" data-effect="sharpen">Sharpen</div>
-                    <div class="effect-item" data-effect="grayscale">Grayscale</div>
-                    <div class="effect-item" data-effect="sepia">Sepia</div>
-                    <div class="effect-item" data-effect="vignette">Vignette</div>
-                    <div class="effect-item" data-effect="mirror">Mirror</div>
-                    <div class="effect-item" data-effect="rotate">Rotate</div>
-                    <div class="effect-item" data-effect="brightness">Brightness</div>
-                    <div class="effect-item" data-effect="contrast">Contrast</div>
-                    <div class="effect-item" data-effect="saturation">Saturation</div>
-                </div>
-            </div>
-            
-            <div class="panel">
-                <div class="panel-title">Transitions</div>
-                <div class="effects-list">
-                    <div class="effect-item" data-transition="fade">Fade</div>
-                    <div class="effect-item" data-transition="wipe">Wipe</div>
-                    <div class="effect-item" data-transition="dissolve">Dissolve</div>
-                    <div class="effect-item" data-transition="slide">Slide</div>
-                    <div class="effect-item" data-transition="zoom">Zoom</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="tab-content" id="audio-tab">
-            <div class="panel">
-                <div class="panel-title">Audio Adjustment</div>
-                <div class="form-group">
-                    <label for="volume">Volume:</label>
-                    <input type="range" id="volume" min="0" max="2" step="0.1" value="1">
-                    <span id="volume-value">100%</span>
-                </div>
-                <button id="apply-volume-btn" class="btn">Apply Volume</button>
-                
-                <div class="form-group">
-                    <label for="audio-fade-in">Fade In (seconds):</label>
-                    <input type="number" id="audio-fade-in" min="0" step="0.1" value="0">
-                </div>
-                <div class="form-group">
-                    <label for="audio-fade-out">Fade Out (seconds):</label>
-                    <input type="number" id="audio-fade-out" min="0" step="0.1" value="0">
-                </div>
-                <button id="apply-fade-btn" class="btn">Apply Fade</button>
-            </div>
-            
-            <div class="panel">
-                <div class="panel-title">Audio Effects</div>
-                <div class="effects-list">
-                    <div class="effect-item" data-audio-effect="eq">Equalizer</div>
-                    <div class="effect-item" data-audio-effect="compress">Compression</div>
-                    <div class="effect-item" data-audio-effect="reverb">Reverb</div>
-                    <div class="effect-item" data-audio-effect="pitch">Pitch Shift</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="tab-content" id="text-tab">
-            <div class="panel">
-                <div class="panel-title">Add Text</div>
-                <div class="form-group">
-                    <label for="text-content">Text Content:</label>
-                    <textarea id="text-content" rows="3" placeholder="Enter your text here"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="text-font">Font:</label>
-                    <select id="text-font">
-                        <option value="Arial">Arial</option>
-                        <option value="Verdana">Verdana</option>
-                        <option value="Times New Roman">Times New Roman</option>
-                        <option value="Courier New">Courier New</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="text-size">Font Size:</label>
-                    <input type="number" id="text-size" min="8" max="100" value="24">
-                </div>
-                <div class="form-group">
-                    <label for="text-color">Color:</label>
-                    <input type="color" id="text-color" value="#ffffff">
-                </div>
-                <div class="form-group">
-                    <label for="text-position">Position:</label>
-                    <select id="text-position">
-                        <option value="top">Top</option>
-                        <option value="center">Center</option>
-                        <option value="bottom">Bottom</option>
-                    </select>
-                </div>
-                <button id="add-text-btn" class="btn">Add Text</button>
-            </div>
-        </div>
-        
-        <div class="tab-content" id="advanced-tab">
-            <div class="panel">
-                <div class="panel-title">FFmpeg Command</div>
-                <div class="form-group">
-                    <label for="ffmpeg-command">Custom FFmpeg Command:</label>
-                    <textarea id="ffmpeg-command" rows="3" placeholder="Enter custom FFmpeg command"></textarea>
-                </div>
-                <button id="run-command-btn" class="btn">Run Command</button>
-            </div>
-            
-            <div class="panel">
-                <div class="panel-title">Command Output</div>
-                <div class="command-output" id="command-output">
-                    Ready for commands...
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- Modals -->
-    <div class="modal" id="effect-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="effect-modal-title">Effect Settings</h2>
-                <button class="close-btn" data-close-modal>&times;</button>
-            </div>
-            <div id="effect-settings">
-                <!-- Effect settings will be added dynamically -->
-            </div>
-            <button id="apply-effect-btn" class="btn btn-success">Apply Effect</button>
-        </div>
-    </div>
-    
+
     <script>
-        // Mock FFmpeg functionality since this is a static HTML demo
-        class FFmpegMock {
-            constructor() {
-                this.mediaLibrary = [];
-                this.timeline = {
-                    videoTrack: [],
-                    audioTrack: []
-                };
-                this.currentClip = null;
-                this.commandOutput = document.getElementById('command-output');
-                this.loadingIndicator = document.getElementById('loading-indicator');
-                this.progressBar = document.getElementById('progress-bar');
-                this.loadingStatus = document.getElementById('loading-status');
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const videoPreview = document.getElementById('videoPreview');
+            const videoUpload = document.getElementById('videoUpload');
+            const overlayUpload = document.getElementById('overlayUpload');
+            const musicUpload = document.getElementById('musicUpload');
+            const startTimeInput = document.getElementById('startTime');
+            const endTimeInput = document.getElementById('endTime');
+            const applyTrimButton = document.getElementById('applyTrim');
+            const subtitleText = document.getElementById('subtitleText');
+            const subtitleStart = document.getElementById('subtitleStart');
+            const subtitleEnd = document.getElementById('subtitleEnd');
+            const subtitleColor = document.getElementById('subtitleColor');
+            const subtitleSize = document.getElementById('subtitleSize');
+            const addSubtitleButton = document.getElementById('addSubtitle');
+            const subtitlesList = document.getElementById('subtitlesList');
+            const subtitleDisplay = document.getElementById('subtitleDisplay');
+            const overlayX = document.getElementById('overlayX');
+            const overlayY = document.getElementById('overlayY');
+            const overlayWidth = document.getElementById('overlayWidth');
+            const overlayStart = document.getElementById('overlayStart');
+            const overlayEnd = document.getElementById('overlayEnd');
+            const addOverlayButton = document.getElementById('addOverlay');
+            const overlaysList = document.getElementById('overlaysList');
+            const overlayContainer = document.getElementById('overlayContainer');
+            const musicVolume = document.getElementById('musicVolume');
+            const musicStart = document.getElementById('musicStart');
+            const addMusicButton = document.getElementById('addMusic');
+            const musicList = document.getElementById('musicList');
+            const ttsText = document.getElementById('ttsText');
+            const ttsVoice = document.getElementById('ttsVoice');
+            const ttsStart = document.getElementById('ttsStart');
+            const ttsVolume = document.getElementById('ttsVolume');
+            const previewTtsButton = document.getElementById('previewTts');
+            const addTtsButton = document.getElementById('addTts');
+            const ttsList = document.getElementById('ttsList');
+            const exportFormat = document.getElementById('exportFormat');
+            const exportQuality = document.getElementById('exportQuality');
+            const exportVideoButton = document.getElementById('exportVideo');
+            const exportProgress = document.getElementById('exportProgress');
+            const progressBar = document.getElementById('progressBar');
+            const downloadLinkContainer = document.getElementById('downloadLinkContainer');
             
-            log(message) {
-                this.commandOutput.textContent += "\n> " + message;
-                this.commandOutput.scrollTop = this.commandOutput.scrollHeight;
-            }
+            // Tab navigation
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
             
-            importMedia(files) {
-                this.showLoading("Importing media...");
-                
-                // Simulate processing time
-                let progress = 0;
-                const interval = setInterval(() => {
-                    progress += 10;
-                    this.updateProgress(progress);
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabName = button.getAttribute('data-tab');
                     
-                    if (progress >= 100) {
-                        clearInterval(interval);
-                        
-                        // Add files to library after "processing"
-                        Array.from(files).forEach(file => {
-                            const mediaItem = {
-                                id: 'media_' + Date.now() + Math.floor(Math.random() * 1000),
-                                name: file.name,
-                                type: file.type.split('/')[0],
-                                duration: Math.floor(Math.random() * 60) + 10, // Mock duration
-                                url: URL.createObjectURL(file),
-                                file: file
-                            };
-                            
-                            this.mediaLibrary.push(mediaItem);
-                        });
-                        
-                        this.updateMediaLibrary();
-                        this.log(`Imported ${files.length} files successfully.`);
-                        this.hideLoading();
-                    }
-                }, 200);
-            }
-            
-            updateMediaLibrary() {
-                const libraryEl = document.getElementById('media-library');
-                libraryEl.innerHTML = '';
-                
-                this.mediaLibrary.forEach(media => {
-                    const mediaEl = document.createElement('div');
-                    mediaEl.className = 'media-item';
-                    mediaEl.dataset.id = media.id;
+                    // Update active button
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
                     
-                    if (media.type === 'video') {
-                        const videoThumb = document.createElement('video');
-                        videoThumb.src = media.url;
-                        videoThumb.muted = true;
-                        mediaEl.appendChild(videoThumb);
-                        
-                        videoThumb.addEventListener('mouseover', () => {
-                            videoThumb.currentTime = 1;
-                            videoThumb.play();
-                        });
-                        
-                        videoThumb.addEventListener('mouseout', () => {
-                            videoThumb.pause();
-                        });
-                    } else if (media.type === 'image') {
-                        const imgThumb = document.createElement('img');
-                        imgThumb.src = media.url;
-                        mediaEl.appendChild(imgThumb);
-                    } else if (media.type === 'audio') {
-                        const audioIcon = document.createElement('div');
-                        audioIcon.textContent = '🔊';
-                        audioIcon.style.display = 'flex';
-                        audioIcon.style.alignItems = 'center';
-                        audioIcon.style.justifyContent = 'center';
-                        audioIcon.style.height = '100%';
-                        audioIcon.style.fontSize = '2rem';
-                        mediaEl.appendChild(audioIcon);
-                    }
-                    
-                    const labelEl = document.createElement('div');
-                    labelEl.className = 'media-item-label';
-                    labelEl.textContent = media.name;
-                    mediaEl.appendChild(labelEl);
-                    
-                    mediaEl.addEventListener('dblclick', () => {
-                        this.addToTimeline(media);
-                    });
-                    
-                    libraryEl.appendChild(mediaEl);
-                });
-            }
-            
-            addToTimeline(media) {
-                const clipId = 'clip_' + Date.now();
-                const clipDuration = media.duration;
-                const trackElement = document.getElementById(media.type === 'audio' ? 'audio-track' : 'video-track');
-                
-                // Calculate position (just append for this demo)
-                const position = this.getTrackDuration(trackElement) * 10; // 10px per second for visualization
-                
-                const clipElement = document.createElement('div');
-                clipElement.className = 'clip';
-                clipElement.style.left = position + 'px';
-                clipElement.style.width = (clipDuration * 10) + 'px'; // 10px per second for visualization
-                clipElement.textContent = media.name;
-                clipElement.dataset.id = clipId;
-                clipElement.dataset.mediaId = media.id;
-                
-                // Add resize handles
-                const leftHandle = document.createElement('div');
-                leftHandle.className = 'clip-handle left';
-                clipElement.appendChild(leftHandle);
-                
-                const rightHandle = document.createElement('div');
-                rightHandle.className = 'clip-handle right';
-                clipElement.appendChild(rightHandle);
-                
-                trackElement.appendChild(clipElement);
-                
-                // Add to timeline data
-                const clip = {
-                    id: clipId,
-                    mediaId: media.id,
-                    start: 0,
-                    end: clipDuration,
-                    position: position / 10, // Convert back to seconds
-                    effects: []
-                };
-                
-                if (media.type === 'audio') {
-                    this.timeline.audioTrack.push(clip);
-                } else {
-                    this.timeline.videoTrack.push(clip);
-                }
-                
-                this.log(`Added "${media.name}" to timeline.`);
-                this.makeClipsDraggable();
-                
-                // Update preview
-                if (media.type === 'video' || media.type === 'image') {
-                    const previewEl = document.getElementById('preview');
-                    previewEl.src = media.url;
-                }
-            }
-            
-            getTrackDuration(trackElement) {
-                let maxEnd = 0;
-                const clips = trackElement.querySelectorAll('.clip');
-                clips.forEach(clip => {
-                    const left = parseInt(clip.style.left || 0);
-                    const width = parseInt(clip.style.width || 0);
-                    const end = (left + width) / 10; // Convert to seconds
-                    if (end > maxEnd) maxEnd = end;
-                });
-                return maxEnd;
-            }
-            
-            makeClipsDraggable() {
-                const clips = document.querySelectorAll('.clip');
-                
-                clips.forEach(clip => {
-                    if (clip.getAttribute('draggable')) return; // Skip if already draggable
-                    
-                    clip.setAttribute('draggable', 'true');
-                    
-                    clip.addEventListener('dragstart', (e) => {
-                        e.dataTransfer.setData('text/plain', clip.dataset.id);
-                        this.currentClip = clip;
-                    });
-                    
-                    clip.addEventListener('click', () => {
-                        // Deselect all clips
-                        document.querySelectorAll('.clip').forEach(c => {
-                            c.style.borderColor = 'transparent';
-                        });
-                        
-                        // Select this clip
-                        clip.style.borderColor = 'white';
-                        clip.style.borderWidth = '2px';
-                        clip.style.borderStyle = 'solid';
-                        this.currentClip = clip;
-                    });
-                });
-                
-                const tracks = document.querySelectorAll('.track');
-                
-                tracks.forEach(track => {
-                    track.addEventListener('dragover', (e) => {
-                        e.preventDefault();
-                    });
-                    
-                    track.addEventListener('drop', (e) => {
-                        e.preventDefault();
-                        const clipId = e.dataTransfer.getData('text/plain');
-                        const clip = document.querySelector(`.clip[data-id="${clipId}"]`);
-                        
-                        if (clip && this.currentClip) {
-                            const trackRect = track.getBoundingClientRect();
-                            const newLeft = e.clientX - trackRect.left;
-                            
-                            // Ensure clip stays within track
-                            if (newLeft >= 0) {
-                                clip.style.left = newLeft + 'px';
-                                
-                                // Update timeline data
-                                const clipData = this.findClipData(clipId);
-                                if (clipData) {
-                                    clipData.position = newLeft / 10; // Convert to seconds
-                                }
-                                
-                                this.log(`Moved clip to position ${(newLeft / 10).toFixed(1)} seconds.`);
-                            }
+                    // Update active tab content
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === tabName) {
+                            content.classList.add('active');
                         }
                     });
                 });
+            });
+            
+            // Video upload handling
+            videoUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const url = URL.createObjectURL(file);
+                    videoPreview.src = url;
+                    
+                    // Wait for metadata to load to get duration
+                    videoPreview.onloadedmetadata = function() {
+                        endTimeInput.value = videoPreview.duration.toFixed(1);
+                        updateTimeline();
+                    };
+                }
+            });
+            
+            // Trimming functionality
+            applyTrimButton.addEventListener('click', function() {
+                const startTime = parseFloat(startTimeInput.value);
+                const endTime = parseFloat(endTimeInput.value);
+                
+                if (startTime >= 0 && endTime <= videoPreview.duration && startTime < endTime) {
+                    // Set the playback range
+                    videoPreview.currentTime = startTime;
+                    
+                    // Add event listener to loop within trim points
+                    videoPreview.addEventListener('timeupdate', checkTrimBounds);
+                    
+                    updateTimeline();
+                } else {
+                    alert('Invalid trim points. Please make sure start time is less than end time and both are within video duration.');
+                }
+            });
+            
+            function checkTrimBounds() {
+                const startTime = parseFloat(startTimeInput.value);
+                const endTime = parseFloat(endTimeInput.value);
+                
+                if (videoPreview.currentTime < startTime) {
+                    videoPreview.currentTime = startTime;
+                }
+                
+                if (videoPreview.currentTime >= endTime) {
+                    videoPreview.currentTime = startTime;
+                    if (videoPreview.paused) return;
+                    videoPreview.play();
+                }
             }
             
-            findClipData(clipId) {
-                let clipData = this.timeline.videoTrack.find(clip => clip.id === clipId);
-                if (!clipData) {
-                    clipData = this.timeline.audioTra
+            function updateTimeline() {
+                // Simple timeline update
+                // In a real implementation, this would be more sophisticated
+                console.log('Timeline updated with trim points:', startTimeInput.value, endTimeInput.value);
+            }
+            
+            // Subtitles functionality
+            let subtitles = [];
+            
+            addSubtitleButton.addEventListener('click', function() {
+                const text = subtitleText.value.trim();
+                const start = parseFloat(subtitleStart.value);
+                const end = parseFloat(subtitleEnd.value);
+                const color = subtitleColor.value;
+                const size = subtitleSize.value;
+                
+                if (text && start >= 0 && end > start) {
+                    const subtitle = {
+                        id: Date.now(),
+                        text,
+                        start,
+                        end,
+                        color,
+                        size
+                    };
+                    
+                    subtitles.push(subtitle);
+                    renderSubtitlesList();
+                    subtitleText.value = '';
+                } else {
+                    alert('Please enter valid subtitle text and time range.');
+                }
+            });
+            
+            function renderSubtitlesList() {
+                subtitlesList.innerHTML = '';
+                
+                subtitles.forEach(subtitle => {
+                    const item = document.createElement('div');
+                    item.className = 'subtitle-item';
+                    item.innerHTML = `
+                        <div>
+                            <strong>${subtitle.text.substring(0, 20)}${subtitle.text.length > 20 ? '...' : ''}</strong>
+                            <div>${subtitle.start}s - ${subtitle.end}s</div>
+                        </div>
+                        <div>
+                            <button class="edit-subtitle" data-id="${subtitle.id}">Edit</button>
+                            <button class="delete-subtitle" data-id="${subtitle.id}">Delete</button>
+                        </div>
+                    `;
+                    subtitlesList.appendChild(item);
+                });
+                
+                // Add event listeners to edit and delete buttons
+                document.querySelectorAll('.edit-subtitle').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        const subtitle = subtitles.find(s => s.id === id);
+                        
+                        if (subtitle) {
+                            subtitleText.value = subtitle.text;
+                            subtitleStart.value = subtitle.start;
+                            subtitleEnd.value = subtitle.end;
+                            subtitleColor.value = subtitle.color;
+                            subtitleSize.value = subtitle.size;
+                            
+                            // Remove the subtitle
+                            subtitles = subtitles.filter(s => s.id !== id);
+                            renderSubtitlesList();
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.delete-subtitle').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        subtitles = subtitles.filter(s => s.id !== id);
+                        renderSubtitlesList();
+                    });
+                });
+            }
+            
+            // Display subtitles during playback
+            videoPreview.addEventListener('timeupdate', function() {
+                const currentTime = videoPreview.currentTime;
+                const activeSubtitles = subtitles.filter(s => 
+                    currentTime >= s.start && currentTime <= s.end
+                );
+                
+                if (activeSubtitles.length > 0) {
+                    // Display the first active subtitle (in a real impl, could handle multiple)
+                    const subtitle = activeSubtitles[0];
+                    subtitleDisplay.textContent = subtitle.text;
+                    subtitleDisplay.style.color = subtitle.color;
+                    subtitleDisplay.style.fontSize = subtitle.size;
+                    subtitleDisplay.style.display = 'block';
+                } else {
+                    subtitleDisplay.style.display = 'none';
+                }
+                
+                updateOverlays(currentTime);
+            });
+            
+            // Image Overlays functionality
+            let overlays = [];
+            let overlayImage = null;
+            
+            overlayUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        overlayImage = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            addOverlayButton.addEventListener('click', function() {
+                if (!overlayImage) {
+                    alert('Please upload an image first.');
+                    return;
+                }
+                
+                const x = parseInt(overlayX.value);
+                const y = parseInt(overlayY.value);
+                const width = parseInt(overlayWidth.value);
+                const start = parseFloat(overlayStart.value);
+                const end = parseFloat(overlayEnd.value);
+                
+                if (x >= 0 && y >= 0 && width > 0 && start >= 0 && end > start) {
+                    const overlay = {
+                        id: Date.now(),
+                        image: overlayImage,
+                        x,
+                        y,
+                        width,
+                        start,
+                        end
+                    };
+                    
+                    overlays.push(overlay);
+                    renderOverlaysList();
+                    
+                    // Reset the uploaded image
+                    overlayImage = null;
+                    overlayUpload.value = '';
+                } else {
+                    alert('Please enter valid overlay position and time range.');
+                }
+            });
+            
+            function renderOverlaysList() {
+                overlaysList.innerHTML = '';
+                
+                overlays.forEach(overlay => {
+                    const item = document.createElement('div');
+                    item.className = 'overlay-item';
+                    item.innerHTML = `
+                        <div>
+                            <img src="${overlay.image}" alt="Overlay">
+                            <div>Position: ${overlay.x}%, ${overlay.y}%</div>
+                            <div>Time: ${overlay.start}s - ${overlay.end}s</div>
+                        </div>
+                        <div>
+                            <button class="edit-overlay" data-id="${overlay.id}">Edit</button>
+                            <button class="delete-overlay" data-id="${overlay.id}">Delete</button>
+                        </div>
+                    `;
+                    overlaysList.appendChild(item);
+                });
+                
+                // Add event listeners
+                document.querySelectorAll('.edit-overlay').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        const overlay = overlays.find(o => o.id === id);
+                        
+                        if (overlay) {
+                            overlayImage = overlay.image;
+                            overlayX.value = overlay.x;
+                            overlayY.value = overlay.y;
+                            overlayWidth.value = overlay.width;
+                            overlayStart.value = overlay.start;
+                            overlayEnd.value = overlay.end;
+                            
+                            // Remove the overlay
+                            overlays = overlays.filter(o => o.id !== id);
+                            renderOverlaysList();
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.delete-overlay').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        overlays = overlays.filter(o => o.id !== id);
+                        renderOverlaysList();
+                    });
+                });
+            }
+            
+            function updateOverlays(currentTime) {
+                // Clear existing overlays
+                overlayContainer.innerHTML = '';
+                
+                // Add active overlays
+                overlays.forEach(overlay => {
+                    if (currentTime >= overlay.start && currentTime <= overlay.end) {
+                        const overlayElement = document.createElement('img');
+                        overlayElement.src = overlay.image;
+                        overlayElement.className = 'video-overlay';
+                        overlayElement.style.left = `${overlay.x}%`;
+                        overlayElement.style.top = `${overlay.y}%`;
+                        overlayElement.style.width = `${overlay.width}%`;
+                        overlayContainer.appendChild(overlayElement);
+                    }
+                });
+            }
+            
+            // Background Music functionality
+            let backgroundMusic = [];
+            let musicAudio = new Audio();
+            
+            musicUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const url = URL.createObjectURL(file);
+                    musicAudio.src = url;
+                    musicAudio.volume = parseFloat(musicVolume.value);
+                }
+            });
+            
+            addMusicButton.addEventListener('click', function() {
+                if (!musicAudio.src) {
+                    alert('Please upload audio first.');
+                    return;
+                }
+                
+                const volume = parseFloat(musicVolume.value);
+                const start = parseFloat(musicStart.value);
+                
+                if (volume >= 0 && volume <= 1 && start >= 0) {
+                    // For simplicity, we'll only allow one background music track
+                    backgroundMusic = [{
+                        id: Date.now(),
+                        audio: musicAudio.src,
+                        filename: musicUpload.files[0].name,
+                        volume,
+                        start
+                    }];
+                    
+                    renderMusicList();
+                    
+                    // Reset the audio upload
+                    musicAudio = new Audio();
+                    musicUpload.value = '';
+                } else {
+                    alert('Please enter valid volume and start time.');
+                }
+            });
+            
+            function renderMusicList() {
+                musicList.innerHTML = '';
+                
+                backgroundMusic.forEach(music => {
+                    const item = document.createElement('div');
+                    item.className = 'music-item';
+                    item.innerHTML = `
+                        <div>
+                            <strong>${music.filename}</strong>
+                            <div>Volume: ${music.volume * 100}%</div>
+                            <div>Start: ${music.start}s</div>
+                        </div>
+                        <div>
+                            <button class="edit-music" data-id="${music.id}">Edit</button>
+                            <button class="delete-music" data-id="${music.id}">Delete</button>
+                        </div>
+                    `;
+                    musicList.appendChild(item);
+                });
+                
+                // Add event listeners
+                document.querySelectorAll('.edit-music').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        const music = backgroundMusic.find(m => m.id === id);
+                        
+                        if (music) {
+                            musicAudio = new Audio(music.audio);
+                            musicVolume.value = music.volume;
+                            musicStart.value = music.start;
+                            
+                            // Remove the music
+                            backgroundMusic = [];
+                            renderMusicList();
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.delete-music').forEach(button => {
+                    button.addEventListener('click', function() {
+                        backgroundMusic = [];
+                        renderMusicList();
+                    });
+                });
+            }
+            
+            // Play background music with video
+            videoPreview.addEventListener('play', function() {
+                if (backgroundMusic.length > 0) {
+                    const music = backgroundMusic[0];
+                    const audio = new Audio(music.audio);
+                    audio.volume = music.volume;
+                    
+                    // Set the time offset
+                    const currentVideoTime = videoPreview.currentTime;
+                    if (currentVideoTime < music.start) {
+                        // Wait until the start time
+                        const waitTime = (music.start - currentVideoTime) * 1000;
+                        setTimeout(() => {
+                            if (!videoPreview.paused) {
+                                audio.play();
+                            }
+                        }, waitTime);
+                    } else {
+                        // Start from the middle of the audio
+                        audio.currentTime = currentVideoTime - music.start
