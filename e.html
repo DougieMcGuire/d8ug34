@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFmpeg WASM - Text Overlay</title>
+</head>
+<body>
+
+    <h2>Upload Video and Add Text Overlay</h2>
+    <input type="file" id="videoInput" accept="video/*">
+    <input type="text" id="overlayText" placeholder="Enter overlay text">
+    <button id="convertButton">Add Text and Convert</button>
+    <video id="outputVideo" controls></video>
+    <a id="downloadLink" style="display: none;" download="edited_video.mp4">Download Video</a>
+
+    <script type="module">
+        import { createFFmpeg, fetchFile } from 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/+esm';
+
+        const ffmpeg = createFFmpeg({ log: true });
+
+        document.getElementById("convertButton").addEventListener("click", async () => {
+            if (!ffmpeg.isLoaded()) {
+                await ffmpeg.load(); // Load ffmpeg.wasm into memory
+            }
+
+            const inputElement = document.getElementById("videoInput");
+            const textInput = document.getElementById("overlayText").value.trim();
+            const file = inputElement.files[0];
+
+            if (!file) {
+                alert("Please select a video file.");
+                return;
+            }
+
+            const fileName = "input." + file.name.split('.').pop(); // Preserve file extension
+            await ffmpeg.FS("writeFile", fileName, await fetchFile(file));
+
+            // FFmpeg Command: Add Text Overlay
+            await ffmpeg.run(
+                "-i", fileName, // Input file
+                "-vf", `drawtext=text='${textInput}':fontcolor=white:fontsize=24:x=(w-text_w)/2:y=h-50`, 
+                "output.mp4"
+            );
+
+            const data = ffmpeg.FS("readFile", "output.mp4");
+            const videoBlob = new Blob([data.buffer], { type: "video/mp4" });
+            const videoUrl = URL.createObjectURL(videoBlob);
+
+            // Display the processed video
+            const outputVideo = document.getElementById("outputVideo");
+            outputVideo.src = videoUrl;
+            outputVideo.style.display = "block";
+
+            // Show download link
+            const downloadLink = document.getElementById("downloadLink");
+            downloadLink.href = videoUrl;
+            downloadLink.style.display = "block";
+            downloadLink.innerText = "Download Edited Video";
+        });
+    </script>
+
+</body>
+</html>
