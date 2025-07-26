@@ -575,17 +575,67 @@
                 </div>
                 <div class="link-inputs">
                     <input type="text" placeholder="Link Title" class="link-title-input" maxlength="50">
-                    <input type="url" placeholder="https://example.com" class="link-url-input">
                     <select class="link-platform-select" onchange="handlePlatformChange(this)">
                         ${Object.entries(window.socialPlatforms).map(([key, value]) => 
                             `<option value="${key}">${value}</option>`
                         ).join('')}
                     </select>
+                    <input type="text" placeholder="Username or Full URL" class="link-url-input" onblur="generatePlatformURL(this)">
+                </div>
+                <div class="generated-url" style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.7; display: none;">
+                    Final URL: <span class="final-url"></span>
                 </div>
             `;
             
             linksList.appendChild(linkItem);
             updateLinkNumbers();
+        };
+
+        window.generatePlatformURL = function(input) {
+            const linkItem = input.closest('.link-item');
+            const platform = linkItem.querySelector('.link-platform-select').value;
+            const userInput = input.value.trim();
+            const generatedUrlDiv = linkItem.querySelector('.generated-url');
+            const finalUrlSpan = linkItem.querySelector('.final-url');
+            
+            if (!userInput) {
+                generatedUrlDiv.style.display = 'none';
+                return;
+            }
+            
+            // If it's already a full URL, keep it as is
+            if (userInput.startsWith('http://') || userInput.startsWith('https://')) {
+                finalUrlSpan.textContent = userInput;
+                generatedUrlDiv.style.display = 'block';
+                return;
+            }
+            
+            // If it's custom or facebook, require full URL
+            if (platform === 'custom' || platform === 'facebook') {
+                if (!userInput.startsWith('http')) {
+                    input.placeholder = 'Full URL required (https://...)';
+                    input.style.borderColor = '#ff6b6b';
+                    generatedUrlDiv.style.display = 'none';
+                    return;
+                } else {
+                    input.style.borderColor = '';
+                    finalUrlSpan.textContent = userInput;
+                    generatedUrlDiv.style.display = 'block';
+                    return;
+                }
+            }
+            
+            // Generate URL for other platforms
+            if (window.platformURLs[platform]) {
+                // Clean username (remove @ if present)
+                const cleanUsername = userInput.replace(/^@/, '');
+                const generatedURL = window.platformURLs[platform](cleanUsername);
+                finalUrlSpan.textContent = generatedURL;
+                generatedUrlDiv.style.display = 'block';
+                input.style.borderColor = '#26de81'; // Green border for valid
+            } else {
+                generatedUrlDiv.style.display = 'none';
+            }
         };
 
         window.removeLinkItem = function(button) {
@@ -603,11 +653,22 @@
         window.handlePlatformChange = function(select) {
             const customCount = document.querySelectorAll('[data-platform="custom"]').length;
             const currentItem = select.closest('.link-item');
+            const urlInput = currentItem.querySelector('.link-url-input');
             
             // Remove existing warning
             const existingWarning = currentItem.querySelector('.custom-limit-warning');
             if (existingWarning) {
                 existingWarning.remove();
+            }
+            
+            // Reset input styling
+            urlInput.style.borderColor = '';
+            
+            // Update placeholder based on platform
+            if (select.value === 'custom' || select.value === 'facebook') {
+                urlInput.placeholder = 'Full URL required (https://...)';
+            } else {
+                urlInput.placeholder = `Enter your ${window.socialPlatforms[select.value]} username`;
             }
             
             if (select.value === 'custom') {
@@ -620,10 +681,14 @@
                     warning.innerHTML = 'Only one custom website is allowed. <a href="/website" target="_blank" style="color: #feca57; text-decoration: underline;">Click here for more</a>';
                     currentItem.appendChild(warning);
                     select.value = 'tiktok';
+                    urlInput.placeholder = 'Enter your TikTok username';
                     return;
                 }
             }
             
+            // Clear the URL input when platform changes
+            urlInput.value = '';
+            currentItem.querySelector('.generated-url').style.display = 'none';
             currentItem.setAttribute('data-platform', select.value);
         };
 
@@ -633,11 +698,21 @@
             
             linkItems.forEach(item => {
                 const title = item.querySelector('.link-title-input').value.trim();
-                const url = item.querySelector('.link-url-input').value.trim();
+                const urlInput = item.querySelector('.link-url-input').value.trim();
                 const platform = item.querySelector('.link-platform-select').value;
                 
-                if (title && url) {
-                    links.push({ title, url, platform });
+                if (title && urlInput) {
+                    let finalURL = urlInput;
+                    
+                    // Generate URL if it's not already a full URL
+                    if (!urlInput.startsWith('http://') && !urlInput.startsWith('https://')) {
+                        if (platform !== 'custom' && platform !== 'facebook' && window.platformURLs[platform]) {
+                            const cleanUsername = urlInput.replace(/^@/, '');
+                            finalURL = window.platformURLs[platform](cleanUsername);
+                        }
+                    }
+                    
+                    links.push({ title, url: finalURL, platform });
                 }
             });
             
@@ -652,9 +727,17 @@
                 window.addLinkItem();
                 const lastItem = linksList.lastElementChild;
                 lastItem.querySelector('.link-title-input').value = link.title;
+                
+                // For existing links, show the full URL
                 lastItem.querySelector('.link-url-input').value = link.url;
                 lastItem.querySelector('.link-platform-select').value = link.platform;
                 lastItem.setAttribute('data-platform', link.platform);
+                
+                // Show the final URL
+                const finalUrlSpan = lastItem.querySelector('.final-url');
+                const generatedUrlDiv = lastItem.querySelector('.generated-url');
+                finalUrlSpan.textContent = link.url;
+                generatedUrlDiv.style.display = 'block';
             });
         };
 
@@ -786,16 +869,42 @@
         });
 
         // Auth state listener
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 window.currentUser = user;
-                if (window.isEditing) {
-                    window.loadUserProfile();
-                } else {
-                    // Pre-fill with Google account info for new users
+                
+                // Check if user already has a profile
+                try {
+                    const userDoc = await getDoc(doc(db, 'profiles', user.uid));
+                    if (userDoc.exists()) {
+                        // User has existing profile - switch to edit mode
+                        window.isEditing = true;
+                        document.getElementById('pageTitle').textContent = 'Edit Your Bio Link';
+                        document.getElementById('pageSubtitle').textContent = 'Update your profile and social links';
+                        
+                        // Load existing profile data
+                        window.loadUserProfile();
+                    } else {
+                        // New user - pre-fill with Google account info
+                        document.getElementById('displayName').value = user.displayName || '';
+                        
+                        // Suggest username based on Google display name
+                        if (user.displayName) {
+                            const suggestedUsername = user.displayName.toLowerCase()
+                                .replace(/[^a-z0-9]/g, '')
+                                .substring(0, 20);
+                            document.getElementById('username').value = suggestedUsername;
+                            // Check availability of suggested username
+                            setTimeout(() => window.checkUsernameAvailability(), 500);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error checking existing profile:', error);
+                    // Pre-fill with Google account info anyway
                     document.getElementById('displayName').value = user.displayName || '';
                 }
             } else {
+                // Not signed in - redirect to auth
                 window.location.href = '/auth.html';
             }
         });
