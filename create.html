@@ -1,4 +1,6 @@
-<div class="color-option bg-pink" data-color="pink"></div><!DOCTYPE html>
+<div class="action-buttons">
+                <button class="save-btn" onclick="saveProfile()">Save Profile</button>
+                <button class="                        <div class="color-option bg-pink" data-color="pink"></div><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,6 +19,114 @@
             min-height: 100vh;
             padding: 2rem;
             color: white;
+            position: relative;
+        }
+
+        /* Plaid background patterns - actual crosshatch plaid */
+        .plaid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .bg-red .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #ff6348;
+        }
+        .bg-purple .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #667eea;
+        }
+        .bg-pink .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #ff6b6b;
+        }
+        .bg-blue .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #48dbfb;
+        }
+        .bg-green .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #26de81;
+        }
+        .bg-orange .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #feca57;
+        }
+        .bg-teal .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #00d2d3;
+        }
+        .bg-indigo .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #5f27cd;
+        }
+        .bg-yellow .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #f9ca24;
+        }
+        .bg-emerald .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #00b894;
+        }
+        .bg-violet .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #a29bfe;
+        }
+        .bg-rose .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #fd79a8;
+        }
+        .bg-sky .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #74b9ff;
+        }
+        .bg-lime .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #a4b0be;
+        }
+        .bg-black .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(255,255,255,0.1) 35px, rgba(255,255,255,0.1) 40px, transparent 40px, transparent 60px, rgba(255,255,255,0.15) 60px, rgba(255,255,255,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(255,255,255,0.1) 35px, rgba(255,255,255,0.1) 40px, transparent 40px, transparent 60px, rgba(255,255,255,0.15) 60px, rgba(255,255,255,0.15) 65px),
+                #2c2c54;
+        }
+        .bg-gray .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #57606f;
         }
 
         .container {
@@ -29,10 +139,14 @@
             margin-bottom: 3rem;
         }
 
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
         .logo {
             width: 100px;
             height: auto;
-            margin-bottom: 1rem;
         }
 
         .header h1 {
@@ -42,20 +156,25 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            font-weight: 900;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
         }
 
         .header p {
             opacity: 0.9;
             font-size: 1.1rem;
+            font-weight: 600;
         }
 
         .editor-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 15px;
             padding: 2.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 2px solid #333;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            color: white;
         }
 
         .form-section {
@@ -65,9 +184,10 @@
         .section-title {
             font-size: 1.4rem;
             margin-bottom: 1.5rem;
-            color: #feca57;
-            border-bottom: 1px solid rgba(254, 202, 87, 0.3);
+            color: white;
+            border-bottom: 2px solid #666;
             padding-bottom: 0.5rem;
+            font-weight: 700;
         }
 
         .form-group {
@@ -79,27 +199,30 @@
             margin-bottom: 0.5rem;
             font-weight: 600;
             font-size: 1rem;
+            color: white;
         }
 
-        .form-group input, .form-group select {
+        .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 1rem;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid #666;
+            border-radius: 8px;
+            background: #2a2a2a;
             color: white;
             font-size: 1rem;
             transition: all 0.3s ease;
+            font-weight: 500;
         }
 
-        .form-group input:focus, .form-group select:focus {
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             outline: none;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
+            background: #333;
+            border-color: #888;
         }
 
-        .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+        .form-group input::placeholder, .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 400;
         }
 
         .username-status {
@@ -185,11 +308,12 @@
         }
 
         .link-item {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            background: #fff;
+            border-radius: 10px;
             padding: 1.5rem;
             margin-bottom: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid #000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .link-header {
@@ -200,7 +324,7 @@
         }
 
         .link-number {
-            background: rgba(255, 255, 255, 0.2);
+            background: #000;
             color: white;
             width: 30px;
             height: 30px;
@@ -208,13 +332,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 0.9rem;
         }
 
         .remove-link {
             background: #ff6b6b;
-            border: none;
+            border: 2px solid #000;
             color: white;
             padding: 0.5rem 0.8rem;
             border-radius: 6px;
@@ -225,7 +349,6 @@
 
         .remove-link:hover {
             background: #ff5252;
-            transform: translateY(-1px);
         }
 
         .link-inputs {
@@ -235,20 +358,21 @@
         }
 
         .link-inputs input, .link-inputs select {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
+            background: #f8f8f8;
+            border: 2px solid #000;
             padding: 0.8rem;
-            border-radius: 8px;
-            color: white;
+            border-radius: 6px;
+            color: #333;
             font-size: 0.95rem;
+            font-weight: 500;
         }
 
         .add-link-btn {
-            background: linear-gradient(45deg, #48dbfb, #0abde3);
-            border: none;
+            background: #48dbfb;
+            border: 2px solid #333;
             color: white;
             padding: 1rem 2rem;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 1rem;
             font-weight: 600;
@@ -258,7 +382,7 @@
         }
 
         .add-link-btn:hover {
-            transform: translateY(-2px);
+            background: #0abde3;
         }
 
         .action-buttons {
@@ -268,10 +392,10 @@
             margin-top: 3rem;
         }
 
-        .save-btn, .view-profile-btn, .sign-out-btn {
+        .save-btn, .view-profile-btn, .sign-out-btn, .home-btn {
             padding: 1rem 2rem;
-            border: none;
-            border-radius: 12px;
+            border: 2px solid #333;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 1rem;
             font-weight: 600;
@@ -281,23 +405,27 @@
         }
 
         .save-btn {
-            background: linear-gradient(45deg, #26de81, #20bf6b);
+            background: #26de81;
             color: white;
         }
 
         .view-profile-btn {
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            background: #ff6b6b;
             color: white;
         }
 
         .sign-out-btn {
-            background: rgba(255, 255, 255, 0.2);
+            background: #57606f;
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        .save-btn:hover, .view-profile-btn:hover, .sign-out-btn:hover {
-            transform: translateY(-2px);
+        .home-btn {
+            background: #feca57;
+            color: #000;
+        }
+
+        .save-btn:hover, .view-profile-btn:hover, .sign-out-btn:hover, .home-btn:hover {
+            opacity: 0.9;
         }
 
         .custom-limit-warning {
@@ -347,14 +475,13 @@
         }
     </style>
 </head>
-<body>
+<body class="bg-red">
+    <div class="plaid-bg"></div>
     <div class="container">
         <div class="header">
             <img src="MWF.png" alt="Furgus" class="logo">
-            <h1 id="pageTitle">Create Your Bio Link</h1>
-            <p id="pageSubtitle">Customize your profile and add your social links</p>
         </div>
-
+        
         <div class="editor-container">
             <div class="form-section">
                 <h3 class="section-title">Profile Information</h3>
@@ -377,8 +504,8 @@
 
                 <div class="form-group">
                     <label>Bio</label>
-                    <textarea id="profileBio" placeholder="Tell people about yourself..." maxlength="150" rows="3" style="width: 100%; padding: 0.8rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.2); color: white; font-size: 1rem; resize: vertical; font-family: inherit;"></textarea>
-                    <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 0.5rem; text-align: right;">
+                    <textarea id="profileBio" placeholder="Tell people about yourself..." maxlength="150" rows="3" style="width: 100%; padding: 0.8rem; border: 2px solid #666; border-radius: 6px; background: #2a2a2a; color: white; font-size: 1rem; resize: vertical; font-family: inherit; font-weight: 500;"></textarea>
+                    <div style="font-size: 0.8rem; margin-top: 0.5rem; text-align: right; color: white; font-weight: 500;">
                         <span id="bioCharCount">0</span>/150 characters
                     </div>
                 </div>
@@ -423,6 +550,7 @@
             <div class="action-buttons">
                 <button class="save-btn" onclick="saveProfile()">Save Profile</button>
                 <button class="view-profile-btn" onclick="viewProfile()">View Profile</button>
+                <a href="/" class="home-btn">Go Home</a>
                 <button class="sign-out-btn" onclick="signOut()">Sign Out</button>
             </div>
         </div>
