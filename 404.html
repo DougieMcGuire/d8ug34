@@ -18,6 +18,114 @@
             align-items: center;
             justify-content: center;
             color: white;
+            position: relative;
+        }
+
+        /* Plaid background patterns - actual crosshatch plaid */
+        .plaid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .bg-red .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #ff6348;
+        }
+        .bg-purple .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #667eea;
+        }
+        .bg-pink .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #ff6b6b;
+        }
+        .bg-blue .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #48dbfb;
+        }
+        .bg-green .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #26de81;
+        }
+        .bg-orange .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #feca57;
+        }
+        .bg-teal .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #00d2d3;
+        }
+        .bg-indigo .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #5f27cd;
+        }
+        .bg-yellow .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #f9ca24;
+        }
+        .bg-emerald .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #00b894;
+        }
+        .bg-violet .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #a29bfe;
+        }
+        .bg-rose .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #fd79a8;
+        }
+        .bg-sky .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #74b9ff;
+        }
+        .bg-lime .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #a4b0be;
+        }
+        .bg-black .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(255,255,255,0.1) 35px, rgba(255,255,255,0.1) 40px, transparent 40px, transparent 60px, rgba(255,255,255,0.15) 60px, rgba(255,255,255,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(255,255,255,0.1) 35px, rgba(255,255,255,0.1) 40px, transparent 40px, transparent 60px, rgba(255,255,255,0.15) 60px, rgba(255,255,255,0.15) 65px),
+                #2c2c54;
+        }
+        .bg-gray .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #57606f;
         }
 
         .bio-container {
@@ -32,39 +140,60 @@
             width: 120px;
             height: auto;
             margin-bottom: 2rem;
+            border: 4px solid #000;
+            border-radius: 12px;
+            background: white;
+            padding: 8px;
         }
 
         .profile-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 6px solid #000;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 0 4px #000;
+            color: #333;
         }
 
         .profile-picture {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             margin: 0 auto 1rem;
             object-fit: cover;
-            border: 3px solid rgba(255, 255, 255, 0.3);
+            border: 6px solid #000;
             display: block;
+            background: #f0f0f0;
         }
 
         .profile-name {
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 1.8rem;
+            font-weight: 900;
             margin-bottom: 0.5rem;
+            color: #000;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
         }
 
         .profile-url {
-            font-size: 0.9rem;
+            font-size: 1rem;
             opacity: 0.7;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .profile-bio {
+            font-size: 0.95rem;
             margin-bottom: 2rem;
+            color: #444;
+            line-height: 1.4;
+            font-style: italic;
+            border: 2px solid #000;
+            padding: 1rem;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.05);
         }
 
         .social-links {
@@ -75,22 +204,23 @@
         }
 
         .social-link {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
+            background: #fff;
+            border: 4px solid #000;
             padding: 1rem;
             border-radius: 12px;
-            color: white;
+            color: #333;
             text-decoration: none;
             display: flex;
             align-items: center;
             justify-content: flex-start;
             transition: all 0.3s ease;
             cursor: pointer;
+            box-shadow: 4px 4px 0px #000;
         }
 
         .social-link:hover {
-            background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
+            box-shadow: 6px 6px 0px #000;
         }
 
         .link-content {
@@ -102,13 +232,21 @@
         }
 
         .link-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 4px;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            border: 3px solid #000;
+            background: #f8f8f8;
+            overflow: hidden;
+        }
+
+        .link-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .link-text {
@@ -116,16 +254,18 @@
         }
 
         .link-title {
-            font-weight: bold;
+            font-weight: 900;
             display: block;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            color: #000;
         }
 
         .link-subtitle {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             opacity: 0.7;
             margin-top: 0.2rem;
             display: block;
+            font-weight: 600;
         }
 
         .like-section {
@@ -133,31 +273,56 @@
             align-items: center;
             justify-content: center;
             gap: 1rem;
+            margin-bottom: 2rem;
         }
 
         .like-button {
-            background: none;
-            border: none;
-            color: white;
+            background: #fff;
+            border: 4px solid #000;
+            color: #000;
             cursor: pointer;
             font-size: 1.5rem;
-            transition: all 0.2s ease;
-            padding: 0.5rem;
-            border-radius: 50%;
+            padding: 0.8rem 1.2rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 900;
+            box-shadow: 3px 3px 0px #000;
         }
 
         .like-button:hover {
-            transform: scale(1.2);
-            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 5px 5px 0px #000;
         }
 
         .like-button.liked {
-            color: #ff6b6b;
+            background: #ff6b6b;
+            color: white;
         }
 
         .like-count {
-            font-size: 1rem;
-            opacity: 0.8;
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #000;
+        }
+
+        .cta-footer {
+            background: #fff;
+            border: 4px solid #000;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        .cta-link {
+            color: #000;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 0.9rem;
+        }
+
+        .cta-link:hover {
+            text-decoration: underline;
         }
 
         .loading, .error-container {
@@ -170,36 +335,61 @@
             min-height: 100vh;
         }
 
+        .error-container {
+            background: rgba(255, 255, 255, 0.95);
+            border: 6px solid #000;
+            border-radius: 20px;
+            padding: 3rem;
+            color: #333;
+            box-shadow: 8px 8px 0px #000;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .error-img {
+            width: 120px;
+            height: auto;
+            margin-bottom: 2rem;
+            border: 4px solid #000;
+            border-radius: 12px;
+        }
+
         .error-container h2 {
             font-size: 2rem;
             margin-bottom: 1rem;
-            color: #ff6b6b;
+            color: #000;
+            font-weight: 900;
         }
 
         .error-container p {
             margin-bottom: 2rem;
-            opacity: 0.8;
+            font-weight: 600;
+            opacity: 0.7;
         }
 
         .home-link {
-            background: linear-gradient(45deg, #48dbfb, #0abde3);
+            background: #48dbfb;
             color: white;
             padding: 1rem 2rem;
             border-radius: 12px;
             text-decoration: none;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            border: 4px solid #000;
+            font-weight: 900;
+            box-shadow: 4px 4px 0px #000;
         }
 
         .home-link:hover {
             transform: translateY(-2px);
+            box-shadow: 6px 6px 0px #000;
         }
 
         .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
+            border: 4px solid #000;
             border-radius: 50%;
-            border-top: 3px solid white;
-            width: 40px;
-            height: 40px;
+            border-top: 4px solid #48dbfb;
+            width: 50px;
+            height: 50px;
             animation: spin 1s linear infinite;
             margin: 0 auto 1rem;
         }
@@ -208,24 +398,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        /* Background color classes */
-        .bg-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .bg-pink { background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%); }
-        .bg-blue { background: linear-gradient(135deg, #48dbfb 0%, #0abde3 100%); }
-        .bg-green { background: linear-gradient(135deg, #26de81 0%, #20bf6b 100%); }
-        .bg-orange { background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%); }
-        .bg-red { background: linear-gradient(135deg, #ff6348 0%, #ff7675 100%); }
-        .bg-teal { background: linear-gradient(135deg, #00d2d3 0%, #54a0ff 100%); }
-        .bg-indigo { background: linear-gradient(135deg, #5f27cd 0%, #341f97 100%); }
-        .bg-yellow { background: linear-gradient(135deg, #f9ca24 0%, #f0932b 100%); }
-        .bg-emerald { background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); }
-        .bg-violet { background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%); }
-        .bg-rose { background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%); }
-        .bg-sky { background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); }
-        .bg-lime { background: linear-gradient(135deg, #a4b0be 0%, #57606f 100%); }
-        .bg-black { background: linear-gradient(135deg, #2c2c54 0%, #40407a 100%); }
-        .bg-gray { background: linear-gradient(135deg, #57606f 0%, #2f3542 100%); }
 
         @media (max-width: 768px) {
             .bio-container {
@@ -242,7 +414,8 @@
         }
     </style>
 </head>
-<body class="bg-purple">
+<body class="bg-red">
+    <div class="plaid-bg"></div>
     <div class="loading">
         <div class="spinner"></div>
         <h2>Loading bio link...</h2>
@@ -267,23 +440,23 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Platform icons and data
+        // Platform icons using real logos
         const platformIcons = {
-            'custom': '🌐',
-            'tiktok': '🎵',
-            'twitter': '🐦',
-            'instagram': '📷',
-            'facebook': '👤',
-            'snapchat': '👻',
-            'pinterest': '📌',
-            'reddit': '🤖',
-            'bluesky': '☁️',
-            'github': '💻',
-            'youtube': '📺',
-            'linkedin': '💼',
-            'discord': '🎮',
-            'twitch': '🎮',
-            'telegram': '✈️'
+            'custom': 'https://cdn-icons-png.flaticon.com/512/3659/3659898.png',
+            'tiktok': 'https://cdn-icons-png.flaticon.com/512/3046/3046120.png',
+            'twitter': 'https://cdn-icons-png.flaticon.com/512/124/124021.png',
+            'instagram': 'https://cdn-icons-png.flaticon.com/512/174/174855.png',
+            'facebook': 'https://cdn-icons-png.flaticon.com/512/174/174848.png',
+            'snapchat': 'https://cdn-icons-png.flaticon.com/512/174/174872.png',
+            'pinterest': 'https://cdn-icons-png.flaticon.com/512/174/174863.png',
+            'reddit': 'https://cdn-icons-png.flaticon.com/512/174/174866.png',
+            'bluesky': 'https://cdn-icons-png.flaticon.com/512/3059/3059997.png',
+            'github': 'https://cdn-icons-png.flaticon.com/512/174/174857.png',
+            'youtube': 'https://cdn-icons-png.flaticon.com/512/174/174883.png',
+            'linkedin': 'https://cdn-icons-png.flaticon.com/512/174/174857.png',
+            'discord': 'https://cdn-icons-png.flaticon.com/512/5968/5968756.png',
+            'twitch': 'https://cdn-icons-png.flaticon.com/512/5968/5968819.png',
+            'telegram': 'https://cdn-icons-png.flaticon.com/512/174/174855.png'
         };
 
         const socialPlatforms = {
@@ -312,12 +485,28 @@
             return path.substring(1); // Remove the leading "/"
         }
 
+        // Extract username from Snapchat URL for Bitmoji
+        function getSnapchatUsername(url) {
+            const match = url.match(/snapchat\.com\/add\/([^/?]+)/);
+            return match ? match[1] : null;
+        }
+
+        function getIconForLink(link) {
+            if (link.platform === 'snapchat') {
+                const snapUsername = getSnapchatUsername(link.url);
+                if (snapUsername) {
+                    return `https://app.snapchat.com/web/deeplink/snapcode?username=${snapUsername}&type=SVG&bitmoji=enable`;
+                }
+            }
+            return platformIcons[link.platform] || platformIcons['custom'];
+        }
+
         async function loadBioProfile() {
             const username = getUsernameFromPath();
             console.log('Trying to load profile for username:', username);
             
             if (!username) {
-                showError('No username provided');
+                showError();
                 return;
             }
             
@@ -327,7 +516,7 @@
                 const usernameDoc = await getDoc(doc(db, 'usernames', username));
                 if (!usernameDoc.exists()) {
                     console.log('Username not found');
-                    showError('Profile not found');
+                    showError();
                     return;
                 }
                 
@@ -338,7 +527,7 @@
                 
                 if (!profileDoc.exists()) {
                     console.log('Profile not found');
-                    showError('Profile not found');
+                    showError();
                     return;
                 }
                 
@@ -349,7 +538,7 @@
                 
             } catch (error) {
                 console.error('Error loading bio profile:', error);
-                showError('Error loading profile');
+                showError();
             }
         }
 
@@ -368,18 +557,23 @@
             
             // Create the bio profile HTML
             const bioHTML = `
+                <div class="plaid-bg"></div>
                 <div class="bio-container">
                     <img src="${logoSrc}" alt="Furgus" class="logo">
                     <div class="profile-card">
                         <img src="${profileData.profilePicture || getDefaultProfilePic()}" alt="Profile" class="profile-picture">
                         <div class="profile-name">${profileData.displayName}</div>
                         <div class="profile-url">furgus.org/${profileData.username}</div>
+                        ${profileData.bio ? `<div class="profile-bio">${profileData.bio}</div>` : ''}
                         <div class="social-links">
                             ${generateSocialLinks(profileData.links || [])}
                         </div>
                         <div class="like-section">
-                            <button class="like-button ${isProfileLiked(profileData.username) ? 'liked' : ''}" onclick="toggleLike()">♥</button>
+                            <button class="like-button ${isProfileLiked(profileData.username) ? 'liked' : ''}" onclick="toggleLike()">♥ ${isProfileLiked(profileData.username) ? 'Liked' : 'Like'}</button>
                             <span class="like-count">${profileData.likes || 0} likes</span>
+                        </div>
+                        <div class="cta-footer">
+                            <a href="/getstarted" class="cta-link">Want your own professional bio link? Get started here! →</a>
                         </div>
                     </div>
                 </div>
@@ -390,7 +584,7 @@
 
         function generateSocialLinks(links) {
             if (!links || links.length === 0) {
-                return '<p style="opacity: 0.7; font-style: italic;">No links added yet</p>';
+                return '<p style="opacity: 0.7; font-style: italic; font-weight: 600;">No links added yet</p>';
             }
             
             return links.map(link => {
@@ -400,10 +594,14 @@
                     finalUrl = `https://${finalUrl}`;
                 }
                 
+                const iconUrl = getIconForLink(link);
+                
                 return `
                     <a href="${finalUrl}" target="_blank" rel="noopener noreferrer" class="social-link">
                         <div class="link-content">
-                            <div class="link-icon">${platformIcons[link.platform] || '🔗'}</div>
+                            <div class="link-icon">
+                                <img src="${iconUrl}" alt="${link.platform}" onerror="this.src='${platformIcons['custom']}'">
+                            </div>
                             <div class="link-text">
                                 <span class="link-title">${link.title}</span>
                                 <span class="link-subtitle">${socialPlatforms[link.platform] || 'Custom'}</span>
@@ -415,7 +613,7 @@
         }
 
         function getDefaultProfilePic() {
-            return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='40' fill='%23ddd'/%3E%3Ccircle cx='40' cy='30' r='12' fill='%23999'/%3E%3Cellipse cx='40' cy='60' rx='20' ry='15' fill='%23999'/%3E%3C/svg%3E";
+            return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23f0f0f0'/%3E%3Ccircle cx='50' cy='40' r='15' fill='%23ccc'/%3E%3Cellipse cx='50' cy='75' rx='25' ry='20' fill='%23ccc'/%3E%3C/svg%3E";
         }
 
         function isProfileLiked(username) {
@@ -439,11 +637,13 @@
                     const index = likedProfiles.indexOf(username);
                     likedProfiles.splice(index, 1);
                     document.querySelector('.like-button').classList.remove('liked');
+                    document.querySelector('.like-button').innerHTML = '♥ Like';
                 } else {
                     // Like
                     await updateDoc(profileRef, { likes: increment(1) });
                     likedProfiles.push(username);
                     document.querySelector('.like-button').classList.add('liked');
+                    document.querySelector('.like-button').innerHTML = '♥ Liked';
                 }
                 
                 localStorage.setItem('likedProfiles', JSON.stringify(likedProfiles));
@@ -458,15 +658,17 @@
             }
         };
 
-        function showError(message) {
+        function showError() {
             document.body.innerHTML = `
+                <div class="plaid-bg"></div>
                 <div class="error-container">
-                    <h2>Oops!</h2>
-                    <p>${message}</p>
-                    <a href="/create.html" class="home-link">Create Your Bio Link</a>
+                    <img src="404.png" alt="404" class="error-img">
+                    <h2>Something went wrong.</h2>
+                    <p>This page is not available.</p>
+                    <a href="/" class="home-link">Go Home</a>
                 </div>
             `;
-            document.body.className = 'bg-purple';
+            document.body.className = 'bg-red';
         }
 
         // Start loading the bio profile
