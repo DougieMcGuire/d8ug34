@@ -860,28 +860,41 @@
             // Reset input styling
             urlInput.style.borderColor = '';
             
+            // Check for custom link limit BEFORE changing the value
+            if (select.value === 'custom') {
+                // Count existing custom links (excluding current item)
+                const allLinkItems = document.querySelectorAll('.link-item');
+                let customCount = 0;
+                
+                allLinkItems.forEach(item => {
+                    if (item !== currentItem) {
+                        const platformSelect = item.querySelector('.link-platform-select');
+                        if (platformSelect && platformSelect.value === 'custom') {
+                            customCount++;
+                        }
+                    }
+                });
+                
+                console.log('Custom count found:', customCount); // Debug log
+                
+                if (customCount >= 1) {
+                    const warning = document.createElement('div');
+                    warning.className = 'custom-limit-warning';
+                    warning.innerHTML = 'Only 1 custom link allowed, <a href="https://furgus.org/website" target="_blank" style="color: #feca57; text-decoration: underline;">click here to add more</a>';
+                    currentItem.appendChild(warning);
+                    
+                    // Reset to previous value
+                    select.value = 'tiktok';
+                    urlInput.placeholder = 'Enter your TikTok username';
+                    return;
+                }
+            }
+            
             // Update placeholder based on platform
             if (select.value === 'custom' || select.value === 'facebook') {
                 urlInput.placeholder = 'Full URL required (https://...)';
             } else {
                 urlInput.placeholder = `Enter your ${window.socialPlatforms[select.value]} username`;
-            }
-            
-            if (select.value === 'custom') {
-                // Check for existing custom links (excluding current item)
-                const otherCustomItems = Array.from(document.querySelectorAll('.link-item'))
-                    .filter(item => item !== currentItem)
-                    .filter(item => item.querySelector('.link-platform-select').value === 'custom');
-                
-                if (otherCustomItems.length >= 1) {
-                    const warning = document.createElement('div');
-                    warning.className = 'custom-limit-warning';
-                    warning.innerHTML = 'Only 1 custom link allowed, <a href="https://furgus.org/website" target="_blank" style="color: #feca57; text-decoration: underline;">click here to add more</a>';
-                    currentItem.appendChild(warning);
-                    select.value = 'tiktok';
-                    urlInput.placeholder = 'Enter your TikTok username';
-                    return;
-                }
             }
             
             // Clear the URL input when platform changes
