@@ -229,17 +229,25 @@
                 return '<p style="opacity: 0.7; font-style: italic;">No links added yet</p>';
             }
             
-            return links.map(link => `
-                <a href="${link.url}" target="_blank" class="social-link">
-                    <div class="link-content">
-                        <div class="link-icon">${platformIcons[link.platform] || '🔗'}</div>
-                        <div class="link-text">
-                            <span class="link-title">${link.title}</span>
-                            <span class="link-subtitle">${socialPlatforms[link.platform] || 'Custom'}</span>
+            return links.map(link => {
+                // Ensure URL has proper protocol
+                let finalUrl = link.url;
+                if (!finalUrl.startsWith('http://') && !finalUrl.startsWith('https://')) {
+                    finalUrl = `https://${finalUrl}`;
+                }
+                
+                return `
+                    <a href="${finalUrl}" target="_blank" rel="noopener noreferrer" class="social-link">
+                        <div class="link-content">
+                            <div class="link-icon">${platformIcons[link.platform] || '🔗'}</div>
+                            <div class="link-text">
+                                <span class="link-title">${link.title}</span>
+                                <span class="link-subtitle">${socialPlatforms[link.platform] || 'Custom'}</span>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            `).join('');
+                    </a>
+                `;
+            }).join('');
         }
 
         function getDefaultProfilePic() {
