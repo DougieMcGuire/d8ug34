@@ -613,19 +613,30 @@
             if (userInput.startsWith('http://') || userInput.startsWith('https://')) {
                 finalUrlSpan.textContent = userInput;
                 generatedUrlDiv.style.display = 'block';
+                input.style.borderColor = '#26de81';
                 return;
             }
             
-            // If it's custom or facebook, require full URL
+            // If it's custom or facebook, require full URL or auto-add https://
             if (platform === 'custom' || platform === 'facebook') {
-                if (!userInput.startsWith('http')) {
-                    input.placeholder = 'Full URL required (https://...)';
+                let finalURL = userInput;
+                
+                // If they entered a domain like "polor.org", add https://
+                if (userInput.includes('.') && !userInput.startsWith('http')) {
+                    finalURL = `https://${userInput}`;
+                    input.style.borderColor = '#26de81';
+                    finalUrlSpan.textContent = finalURL;
+                    generatedUrlDiv.style.display = 'block';
+                    return;
+                } else if (!userInput.includes('.') && !userInput.startsWith('http')) {
+                    // If no domain extension, require full URL
+                    input.placeholder = 'Full URL required (https://example.com)';
                     input.style.borderColor = '#ff6b6b';
                     generatedUrlDiv.style.display = 'none';
                     return;
                 } else {
-                    input.style.borderColor = '';
-                    finalUrlSpan.textContent = userInput;
+                    input.style.borderColor = '#26de81';
+                    finalUrlSpan.textContent = finalURL;
                     generatedUrlDiv.style.display = 'block';
                     return;
                 }
