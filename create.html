@@ -598,19 +598,11 @@
         };
 
         window.generatePlatformURL = function(input) {
-            console.log('=== DEBUG START ===');
-            console.log('window object keys:', Object.keys(window).filter(k => k.includes('platform')));
-            console.log('window.platformURLs:', window.platformURLs);
-            console.log('window.socialPlatforms:', window.socialPlatforms);
-            console.log('=== DEBUG END ===');
-            
             const linkItem = input.closest('.link-item');
             const platform = linkItem.querySelector('.link-platform-select').value;
             const userInput = input.value.trim();
             const generatedUrlDiv = linkItem.querySelector('.generated-url');
             const finalUrlSpan = linkItem.querySelector('.final-url');
-            
-            console.log('generatePlatformURL called with:', { platform, userInput, platformURLs: window.platformURLs });
             
             if (!userInput) {
                 generatedUrlDiv.style.display = 'none';
@@ -639,19 +631,60 @@
                 }
             }
             
-            // Generate URL for other platforms
-            if (window.platformURLs && window.platformURLs[platform]) {
-                console.log('Generating URL for platform:', platform);
-                // Clean username (remove @ if present)
-                const cleanUsername = userInput.replace(/^@/, '');
-                const generatedURL = window.platformURLs[platform](cleanUsername);
-                console.log('Generated URL:', generatedURL);
+            // Generate URL based on platform - simple switch statement
+            let generatedURL = '';
+            const cleanUsername = userInput.replace(/^@/, '');
+            
+            switch(platform) {
+                case 'tiktok':
+                    generatedURL = `https://tiktok.com/@${cleanUsername}`;
+                    break;
+                case 'twitter':
+                    generatedURL = `https://twitter.com/${cleanUsername}`;
+                    break;
+                case 'instagram':
+                    generatedURL = `https://instagram.com/${cleanUsername}`;
+                    break;
+                case 'snapchat':
+                    generatedURL = `https://snapchat.com/add/${cleanUsername}`;
+                    break;
+                case 'pinterest':
+                    generatedURL = `https://pinterest.com/${cleanUsername}`;
+                    break;
+                case 'reddit':
+                    generatedURL = `https://reddit.com/u/${cleanUsername}`;
+                    break;
+                case 'bluesky':
+                    generatedURL = `https://bsky.app/profile/${cleanUsername}`;
+                    break;
+                case 'github':
+                    generatedURL = `https://github.com/${cleanUsername}`;
+                    break;
+                case 'youtube':
+                    generatedURL = `https://youtube.com/@${cleanUsername}`;
+                    break;
+                case 'linkedin':
+                    generatedURL = `https://linkedin.com/in/${cleanUsername}`;
+                    break;
+                case 'discord':
+                    generatedURL = `https://discord.gg/${cleanUsername}`;
+                    break;
+                case 'twitch':
+                    generatedURL = `https://twitch.tv/${cleanUsername}`;
+                    break;
+                case 'telegram':
+                    generatedURL = `https://t.me/${cleanUsername}`;
+                    break;
+                default:
+                    generatedUrlDiv.style.display = 'none';
+                    return;
+            }
+            
+            if (generatedURL) {
                 finalUrlSpan.textContent = generatedURL;
                 generatedUrlDiv.style.display = 'block';
                 input.style.borderColor = '#26de81'; // Green border for valid
             } else {
-                console.log('No URL generator found for platform:', platform);
-                console.log('Available platforms:', window.platformURLs ? Object.keys(window.platformURLs) : 'platformURLs is undefined');
                 generatedUrlDiv.style.display = 'none';
             }
         };
@@ -724,9 +757,55 @@
                     
                     // Generate URL if it's not already a full URL
                     if (!urlInput.startsWith('http://') && !urlInput.startsWith('https://')) {
-                        if (platform !== 'custom' && platform !== 'facebook' && window.platformURLs[platform]) {
+                        if (platform !== 'custom' && platform !== 'facebook') {
                             const cleanUsername = urlInput.replace(/^@/, '');
-                            finalURL = window.platformURLs[platform](cleanUsername);
+                            
+                            // Generate URL based on platform
+                            switch(platform) {
+                                case 'tiktok':
+                                    finalURL = `https://tiktok.com/@${cleanUsername}`;
+                                    break;
+                                case 'twitter':
+                                    finalURL = `https://twitter.com/${cleanUsername}`;
+                                    break;
+                                case 'instagram':
+                                    finalURL = `https://instagram.com/${cleanUsername}`;
+                                    break;
+                                case 'snapchat':
+                                    finalURL = `https://snapchat.com/add/${cleanUsername}`;
+                                    break;
+                                case 'pinterest':
+                                    finalURL = `https://pinterest.com/${cleanUsername}`;
+                                    break;
+                                case 'reddit':
+                                    finalURL = `https://reddit.com/u/${cleanUsername}`;
+                                    break;
+                                case 'bluesky':
+                                    finalURL = `https://bsky.app/profile/${cleanUsername}`;
+                                    break;
+                                case 'github':
+                                    finalURL = `https://github.com/${cleanUsername}`;
+                                    break;
+                                case 'youtube':
+                                    finalURL = `https://youtube.com/@${cleanUsername}`;
+                                    break;
+                                case 'linkedin':
+                                    finalURL = `https://linkedin.com/in/${cleanUsername}`;
+                                    break;
+                                case 'discord':
+                                    finalURL = `https://discord.gg/${cleanUsername}`;
+                                    break;
+                                case 'twitch':
+                                    finalURL = `https://twitch.tv/${cleanUsername}`;
+                                    break;
+                                case 'telegram':
+                                    finalURL = `https://t.me/${cleanUsername}`;
+                                    break;
+                                default:
+                                    // Keep original input if platform not recognized
+                                    finalURL = urlInput;
+                                    break;
+                            }
                         }
                     }
                     
