@@ -232,8 +232,8 @@
         }
 
         .link-icon {
-            width: 40px;
-            height: 40px;
+            width: 60px;
+            height: 60px;
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -241,6 +241,7 @@
             border: 3px solid #000;
             background: #f8f8f8;
             overflow: hidden;
+            flex-shrink: 0;
         }
 
         .link-icon img {
@@ -325,7 +326,7 @@
             text-decoration: underline;
         }
 
-        .loading, .error-container {
+        .loading {
             text-align: center;
             padding: 2rem;
             display: flex;
@@ -333,55 +334,6 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-        }
-
-        .error-container {
-            background: rgba(255, 255, 255, 0.95);
-            border: 6px solid #000;
-            border-radius: 20px;
-            padding: 3rem;
-            color: #333;
-            box-shadow: 8px 8px 0px #000;
-            max-width: 400px;
-            width: 100%;
-        }
-
-        .error-img {
-            width: 120px;
-            height: auto;
-            margin-bottom: 2rem;
-            border: 4px solid #000;
-            border-radius: 12px;
-        }
-
-        .error-container h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: #000;
-            font-weight: 900;
-        }
-
-        .error-container p {
-            margin-bottom: 2rem;
-            font-weight: 600;
-            opacity: 0.7;
-        }
-
-        .home-link {
-            background: #48dbfb;
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border: 4px solid #000;
-            font-weight: 900;
-            box-shadow: 4px 4px 0px #000;
-        }
-
-        .home-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 6px 6px 0px #000;
         }
 
         .spinner {
@@ -485,6 +437,25 @@
             return path.substring(1); // Remove the leading "/"
         }
 
+        // Extract domain from URL for favicon
+        function getDomainFromUrl(url) {
+            try {
+                const urlObj = new URL(url.startsWith('http') ? url : `https://${url}`);
+                return urlObj.hostname;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // Get favicon URL for custom links
+        function getFaviconUrl(url) {
+            const domain = getDomainFromUrl(url);
+            if (!domain) return platformIcons['custom'];
+            
+            // Try multiple favicon services for better reliability
+            return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+        }
+
         // Extract username from Snapchat URL for Bitmoji
         function getSnapchatUsername(url) {
             const match = url.match(/snapchat\.com\/add\/([^/?]+)/);
@@ -492,6 +463,10 @@
         }
 
         function getIconForLink(link) {
+            if (link.platform === 'custom') {
+                return getFaviconUrl(link.url);
+            }
+            
             if (link.platform === 'snapchat') {
                 const snapUsername = getSnapchatUsername(link.url);
                 if (snapUsername) {
@@ -613,7 +588,7 @@
         }
 
         function getDefaultProfilePic() {
-            return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23f0f0f0'/%3E%3Ccircle cx='50' cy='40' r='15' fill='%23ccc'/%3E%3Cellipse cx='50' cy='75' rx='25' ry='20' fill='%23ccc'/%3E%3C/svg%3E";
+            return "assets/default.png";
         }
 
         function isProfileLiked(username) {
@@ -660,15 +635,65 @@
 
         function showError() {
             document.body.innerHTML = `
-                <div class="plaid-bg"></div>
-                <div class="error-container">
-                    <img src="404.png" alt="404" class="error-img">
-                    <h2>Something went wrong.</h2>
-                    <p>This page is not available.</p>
-                    <a href="/" class="home-link">Go Home</a>
-                </div>
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                  <meta charset="UTF-8" />
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                  <title>404 - Page Not Found</title>
+                  <style>
+                    body {
+                      margin: 0;
+                      padding: 0;
+                      background-color: #000;
+                      color: #fff;
+                      font-family: Arial, sans-serif;
+                      display: flex;
+                      flex-direction: column;
+                      align-items: center;
+                      justify-content: center;
+                      height: 100vh;
+                      text-align: center;
+                    }
+                    img {
+                      max-width: 300px;
+                      width: 100%;
+                      margin-bottom: 20px;
+                    }
+                    h1 {
+                      font-size: 2.5rem;
+                      margin: 0;
+                    }
+                    p {
+                      font-size: 1.2rem;
+                      margin: 10px 0 30px;
+                      color: #ccc;
+                    }
+                    a.button {
+                      display: inline-block;
+                      padding: 12px 24px;
+                      color: white;
+                      background-color: red;
+                      border: 2px solid gray;
+                      text-decoration: none;
+                      border-radius: 5px;
+                      font-weight: bold;
+                      transition: background-color 0.3s ease, border-color 0.3s ease;
+                    }
+                    a.button:hover {
+                      background-color: darkred;
+                      border-color: #999;
+                    }
+                  </style>
+                </head>
+                <body>
+                  <img src="404.png" alt="404 Image" />
+                  <h1>Something went wrong</h1>
+                  <p>Page not available</p>
+                  <a class="button" href="https://furgus.org">Go Home</a>
+                </body>
+                </html>
             `;
-            document.body.className = 'bg-red';
         }
 
         // Start loading the bio profile
