@@ -598,6 +598,12 @@
         };
 
         window.generatePlatformURL = function(input) {
+            console.log('=== DEBUG START ===');
+            console.log('window object keys:', Object.keys(window).filter(k => k.includes('platform')));
+            console.log('window.platformURLs:', window.platformURLs);
+            console.log('window.socialPlatforms:', window.socialPlatforms);
+            console.log('=== DEBUG END ===');
+            
             const linkItem = input.closest('.link-item');
             const platform = linkItem.querySelector('.link-platform-select').value;
             const userInput = input.value.trim();
@@ -645,6 +651,7 @@
                 input.style.borderColor = '#26de81'; // Green border for valid
             } else {
                 console.log('No URL generator found for platform:', platform);
+                console.log('Available platforms:', window.platformURLs ? Object.keys(window.platformURLs) : 'platformURLs is undefined');
                 generatedUrlDiv.style.display = 'none';
             }
         };
