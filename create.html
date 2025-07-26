@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Bio Link - Furgus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .editor-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: #feca57;
+            border-bottom: 1px solid rgba(254, 202, 87, 0.3);
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .username-status {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            min-height: 20px;
+        }
+
+        .profile-pic-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .profile-pic-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .profile-pic-preview:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            background: linear-gradient(45deg, #48dbfb, #0abde3);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .file-input-label:hover {
+            transform: translateY(-2px);
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .color-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .color-option:hover {
+            transform: scale(1.05);
+        }
+
+        .color-option.selected {
+            border-color: white;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .links-section {
+            margin-top: 1rem;
+        }
+
+        .link-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .link-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .link-number {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .remove-link {
+            background: #ff6b6b;
+            border: none;
+            color: white;
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .remove-link:hover {
+            background: #ff5252;
+            transform: translateY(-1px);
+        }
+
+        .link-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .link-inputs input, .link-inputs select {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 0.8rem;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95rem;
+        }
+
+        .add-link-btn {
+            background: linear-gradient(45deg, #48dbfb, #0abde3);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .add-link-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .save-btn, .view-profile-btn, .sign-out-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .save-btn {
+            background: linear-gradient(45deg, #26de81, #20bf6b);
+            color: white;
+        }
+
+        .view-profile-btn {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+        }
+
+        .sign-out-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .save-btn:hover, .view-profile-btn:hover, .sign-out-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .custom-limit-warning {
+            background: rgba(255, 202, 87, 0.2);
+            border: 1px solid #feca57;
+            border-radius: 8px;
+            padding: 0.8rem;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #feca57;
+        }
+
+        /* Background color classes */
+        .bg-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .bg-pink { background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%); }
+        .bg-blue { background: linear-gradient(135deg, #48dbfb 0%, #0abde3 100%); }
+        .bg-green { background: linear-gradient(135deg, #26de81 0%, #20bf6b 100%); }
+        .bg-orange { background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%); }
+        .bg-red { background: linear-gradient(135deg, #ff6348 0%, #ff7675 100%); }
+        .bg-teal { background: linear-gradient(135deg, #00d2d3 0%, #54a0ff 100%); }
+        .bg-indigo { background: linear-gradient(135deg, #5f27cd 0%, #341f97 100%); }
+        .bg-yellow { background: linear-gradient(135deg, #f9ca24 0%, #f0932b 100%); }
+        .bg-emerald { background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); }
+        .bg-violet { background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%); }
+        .bg-rose { background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%); }
+        .bg-sky { background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); }
+        .bg-lime { background: linear-gradient(135deg, #a4b0be 0%, #57606f 100%); }
+        .bg-black { background: linear-gradient(135deg, #2c2c54 0%, #40407a 100%); }
+        .bg-gray { background: linear-gradient(135deg, #57606f 0%, #2f3542 100%); }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .editor-container {
+                padding: 1.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .color-palette {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="MWF.png" alt="Furgus" class="logo">
+            <h1 id="pageTitle">Create Your Bio Link</h1>
+            <p id="pageSubtitle">Customize your profile and add your social links</p>
+        </div>
+
+        <div class="editor-container">
+            <div class="form-section">
+                <h3 class="section-title">Profile Information</h3>
+                
+                <div class="form-group">
+                    <label>Profile Picture</label>
+                    <div class="profile-pic-section">
+                        <img id="previewPic" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Ccircle cx='60' cy='60' r='60' fill='%23ddd'/%3E%3Ccircle cx='60' cy='50' r='18' fill='%23999'/%3E%3Cellipse cx='60' cy='90' rx='30' ry='25' fill='%23999'/%3E%3C/svg%3E" alt="Profile" class="profile-pic-preview">
+                        <div class="file-input-wrapper">
+                            <input type="file" id="profilePicInput" accept="image/*" onchange="handleProfilePicUpload(event)">
+                            <label for="profilePicInput" class="file-input-label">Choose Photo</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Display Name *</label>
+                    <input type="text" id="displayName" placeholder="Your Name" maxlength="50" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Username * (furgus.org/yourname)</label>
+                    <input type="text" id="username" placeholder="yourname" maxlength="30" onblur="checkUsernameAvailability()" required>
+                    <div id="usernameStatus" class="username-status"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Background Color</label>
+                    <div class="color-palette">
+                        <div class="color-option bg-purple selected" data-color="purple" title="Purple"></div>
+                        <div class="color-option bg-pink" data-color="pink" title="Pink"></div>
+                        <div class="color-option bg-blue" data-color="blue" title="Blue"></div>
+                        <div class="color-option bg-green" data-color="green" title="Green"></div>
+                        <div class="color-option bg-orange" data-color="orange" title="Orange"></div>
+                        <div class="color-option bg-red" data-color="red" title="Red"></div>
+                        <div class="color-option bg-teal" data-color="teal" title="Teal"></div>
+                        <div class="color-option bg-indigo" data-color="indigo" title="Indigo"></div>
+                        <div class="color-option bg-yellow" data-color="yellow" title="Yellow"></div>
+                        <div class="color-option bg-emerald" data-color="emerald" title="Emerald"></div>
+                        <div class="color-option bg-violet" data-color="violet" title="Violet"></div>
+                        <div class="color-option bg-rose" data-color="rose" title="Rose"></div>
+                        <div class="color-option bg-sky" data-color="sky" title="Sky"></div>
+                        <div class="color-option bg-lime" data-color="lime" title="Lime"></div>
+                        <div class="color-option bg-black" data-color="black" title="Black"></div>
+                        <div class="color-option bg-gray" data-color="gray" title="Gray"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title">Social Links</h3>
+                <div id="linksList" class="links-section">
+                    <!-- Links will be added here -->
+                </div>
+                <button class="add-link-btn" onclick="addLinkItem()">+ Add Link</button>
+            </div>
+
+            <div class="action-buttons">
+                <button class="save-btn" onclick="saveProfile()">Save Profile</button>
+                <button class="view-profile-btn" onclick="viewProfile()">View Profile</button>
+                <button class="sign-out-btn" onclick="signOut()">Sign Out</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut as firebaseSignOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAvcAd9o-HGRGRpW4b-gocl11vVrXiONvU",
+            authDomain: "furgusbio.firebaseapp.com",
+            projectId: "furgusbio",
+            storageBucket: "furgusbio.firebasestorage.app",
+            messagingSenderId: "175548520637",
+            appId: "1:175548520637:web:1690b607d8647f40247fd4",
+            measurementId: "G-DXTSKVPV7S"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Global variables
+        window.currentUser = null;
+        window.currentProfile = null;
+        window.selectedColor = 'purple';
+        window.isEditing = false;
+
+        // Social platforms
+        window.socialPlatforms = {
+            'custom': 'Custom Website',
+            'tiktok': 'TikTok',
+            'twitter': 'Twitter/X',
+            'instagram': 'Instagram',
+            'facebook': 'Facebook',
+            'snapchat': 'Snapchat',
+            'pinterest': 'Pinterest',
+            'reddit': 'Reddit',
+            'bluesky': 'Bluesky',
+            'github': 'GitHub',
+            'youtube': 'YouTube',
+            'linkedin': 'LinkedIn',
+            'discord': 'Discord',
+            'twitch': 'Twitch',
+            'telegram': 'Telegram'
+        };
+
+        // Reserved usernames
+        const reservedUsernames = [
+            'bio', 'docs', 'website', 'pricing', 'sponsors', '404', 'rate', 
+            'graphic', 'wc', 'gd', 'bl', 'founder', 'info', 'main', 'home',
+            'admin', 'api', 'www', 'mail', 'ftp', 'support', 'help', 'create', 'auth'
+        ];
+
+        // Check if editing existing profile
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('edit') === 'true') {
+            window.isEditing = true;
+            document.getElementById('pageTitle').textContent = 'Edit Your Bio Link';
+            document.getElementById('pageSubtitle').textContent = 'Update your profile and social links';
+        }
+
+        // Profile picture upload
+        window.handleProfilePicUpload = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (file.size > 2 * 1024 * 1024) {
+                alert('File size must be less than 2MB');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                
+                img.onload = function() {
+                    const maxSize = 200;
+                    let { width, height } = img;
+                    
+                    if (width > height) {
+                        if (width > maxSize) {
+                            height = height * (maxSize / width);
+                            width = maxSize;
+                        }
+                    } else {
+                        if (height > maxSize) {
+                            width = width * (maxSize / height);
+                            height = maxSize;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    const webpDataUrl = canvas.toDataURL('image/webp', 0.8);
+                    document.getElementById('previewPic').src = webpDataUrl;
+                };
+                
+                img.src = e.target.result;
+            };
+            
+            reader.readAsDataURL(file);
+        };
+
+        // Username validation
+        window.isUsernameAvailable = async function(username) {
+            if (!username || username.length < 3 || username.length > 30) return false;
+            if (!/^[a-zA-Z0-9_-]+$/.test(username)) return false;
+            if (reservedUsernames.includes(username)) return false;
+            
+            try {
+                const usernameDoc = await getDoc(doc(db, 'usernames', username));
+                if (usernameDoc.exists() && window.currentProfile?.username !== username) {
+                    return false;
+                }
+                return true;
+            } catch (error) {
+                console.error('Error checking username:', error);
+                return false;
+            }
+        };
+
+        window.checkUsernameAvailability = async function() {
+            const username = document.getElementById('username').value.trim().toLowerCase();
+            const statusEl = document.getElementById('usernameStatus');
+            
+            if (!username) {
+                statusEl.innerHTML = '';
+                return;
+            }
+            
+            const available = await window.isUsernameAvailable(username);
+            if (available) {
+                statusEl.innerHTML = '<span style="color: #26de81;">✓ Available</span>';
+            } else {
+                statusEl.innerHTML = '<span style="color: #ff6b6b;">✗ Not available</span>';
+            }
+        };
+
+        // Link management
+        window.addLinkItem = function() {
+            const linksList = document.getElementById('linksList');
+            const linkNumber = linksList.children.length + 1;
+            
+            const linkItem = document.createElement('div');
+            linkItem.className = 'link-item';
+            
+            linkItem.innerHTML = `
+                <div class="link-header">
+                    <div class="link-number">${linkNumber}</div>
+                    <button class="remove-link" onclick="removeLinkItem(this)">Remove</button>
+                </div>
+                <div class="link-inputs">
+                    <input type="text" placeholder="Link Title" class="link-title-input" maxlength="50">
+                    <input type="url" placeholder="https://example.com" class="link-url-input">
+                    <select class="link-platform-select" onchange="handlePlatformChange(this)">
+                        ${Object.entries(window.socialPlatforms).map(([key, value]) => 
+                            `<option value="${key}">${value}</option>`
+                        ).join('')}
+                    </select>
+                </div>
+            `;
+            
+            linksList.appendChild(linkItem);
+            updateLinkNumbers();
+        };
+
+        window.removeLinkItem = function(button) {
+            button.closest('.link-item').remove();
+            updateLinkNumbers();
+        };
+
+        window.updateLinkNumbers = function() {
+            const linkItems = document.querySelectorAll('.link-item');
+            linkItems.forEach((item, index) => {
+                item.querySelector('.link-number').textContent = index + 1;
+            });
+        };
+
+        window.handlePlatformChange = function(select) {
+            const customCount = document.querySelectorAll('[data-platform="custom"]').length;
+            const currentItem = select.closest('.link-item');
+            
+            // Remove existing warning
+            const existingWarning = currentItem.querySelector('.custom-limit-warning');
+            if (existingWarning) {
+                existingWarning.remove();
+            }
+            
+            if (select.value === 'custom') {
+                const otherCustomItems = Array.from(document.querySelectorAll('[data-platform="custom"]'))
+                    .filter(item => item !== currentItem);
+                
+                if (otherCustomItems.length >= 1) {
+                    const warning = document.createElement('div');
+                    warning.className = 'custom-limit-warning';
+                    warning.innerHTML = 'Only one custom website is allowed. <a href="/website" target="_blank" style="color: #feca57; text-decoration: underline;">Click here for more</a>';
+                    currentItem.appendChild(warning);
+                    select.value = 'tiktok';
+                    return;
+                }
+            }
+            
+            currentItem.setAttribute('data-platform', select.value);
+        };
+
+        window.collectLinksFromEditor = function() {
+            const linkItems = document.querySelectorAll('.link-item');
+            const links = [];
+            
+            linkItems.forEach(item => {
+                const title = item.querySelector('.link-title-input').value.trim();
+                const url = item.querySelector('.link-url-input').value.trim();
+                const platform = item.querySelector('.link-platform-select').value;
+                
+                if (title && url) {
+                    links.push({ title, url, platform });
+                }
+            });
+            
+            return links;
+        };
+
+        window.loadLinksInEditor = function(links) {
+            const linksList = document.getElementById('linksList');
+            linksList.innerHTML = '';
+            
+            links.forEach(link => {
+                window.addLinkItem();
+                const lastItem = linksList.lastElementChild;
+                lastItem.querySelector('.link-title-input').value = link.title;
+                lastItem.querySelector('.link-url-input').value = link.url;
+                lastItem.querySelector('.link-platform-select').value = link.platform;
+                lastItem.setAttribute('data-platform', link.platform);
+            });
+        };
+
+        // Color selection
+        window.updateColorSelection = function() {
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.remove('selected');
+                if (option.dataset.color === window.selectedColor) {
+                    option.classList.add('selected');
+                }
+            });
+        };
+
+        // Save profile
+        window.saveProfile = async function() {
+            if (!window.currentUser) {
+                alert('Please sign in first');
+                window.location.href = '/auth.html';
+                return;
+            }
+            
+            const displayName = document.getElementById('displayName').value.trim();
+            const username = document.getElementById('username').value.trim().toLowerCase();
+            
+            if (!displayName || !username) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            if (reservedUsernames.includes(username)) {
+                alert('This username is reserved. Please choose another.');
+                return;
+            }
+            
+            if (!(await window.isUsernameAvailable(username))) {
+                alert('Username is already taken. Please choose another.');
+                return;
+            }
+            
+            try {
+                const links = window.collectLinksFromEditor();
+                const profilePic = document.getElementById('previewPic').src;
+                
+                const profileData = {
+                    userId: window.currentUser.uid,
+                    displayName: displayName,
+                    username: username,
+                    backgroundColor: window.selectedColor,
+                    profilePicture: profilePic,
+                    links: links,
+                    likes: window.currentProfile?.likes || 0,
+                    createdAt: window.currentProfile?.createdAt || new Date(),
+                    updatedAt: new Date()
+                };
+                
+                await setDoc(doc(db, 'profiles', window.currentUser.uid), profileData);
+                await setDoc(doc(db, 'usernames', username), { userId: window.currentUser.uid });
+                
+                window.currentProfile = profileData;
+                alert('Profile saved successfully!');
+                
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                alert('Error saving profile. Please try again.');
+            }
+        };
+
+        // View profile
+        window.viewProfile = function() {
+            if (window.currentProfile && window.currentProfile.username) {
+                window.open(`/${window.currentProfile.username}`, '_blank');
+            } else {
+                alert('Please save your profile first.');
+            }
+        };
+
+        // Sign out
+        window.signOut = async function() {
+            try {
+                await firebaseSignOut(auth);
+                window.location.href = '/auth.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+            }
+        };
+
+        // Load existing profile
+        window.loadUserProfile = async function() {
+            if (!window.currentUser) return;
+            
+            try {
+                const userDoc = await getDoc(doc(db, 'profiles', window.currentUser.uid));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    window.currentProfile = data;
+                    
+                    document.getElementById('displayName').value = data.displayName || '';
+                    document.getElementById('username').value = data.username || '';
+                    
+                    if (data.profilePicture) {
+                        document.getElementById('previewPic').src = data.profilePicture;
+                    }
+                    
+                    window.selectedColor = data.backgroundColor || 'purple';
+                    window.updateColorSelection();
+                    
+                    window.loadLinksInEditor(data.links || []);
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        };
+
+        // Color selection event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    window.selectedColor = this.dataset.color;
+                    window.updateColorSelection();
+                });
+            });
+
+            // Add initial link if none exist
+            setTimeout(() => {
+                if (document.getElementById('linksList').children.length === 0) {
+                    window.addLinkItem();
+                }
+            }, 100);
+        });
+
+        // Auth state listener
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.currentUser = user;
+                if (window.isEditing) {
+                    window.loadUserProfile();
+                } else {
+                    // Pre-fill with Google account info for new users
+                    document.getElementById('displayName').value = user.displayName || '';
+                }
+            } else {
+                window.location.href = '/auth.html';
+            }
+        });
+    </script>
+</body>
+</html>
