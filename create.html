@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<div class="color-option bg-pink" data-color="pink"></div><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -376,6 +376,14 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Bio</label>
+                    <textarea id="profileBio" placeholder="Tell people about yourself..." maxlength="150" rows="3" style="width: 100%; padding: 0.8rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.2); color: white; font-size: 1rem; resize: vertical; font-family: inherit;"></textarea>
+                    <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 0.5rem; text-align: right;">
+                        <span id="bioCharCount">0</span>/150 characters
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label>Username * (furgus.org/yourname)</label>
                     <input type="text" id="username" placeholder="yourname" maxlength="30" onblur="checkUsernameAvailability()" required>
                     <div id="usernameStatus" class="username-status"></div>
@@ -442,7 +450,7 @@
         // Global variables
         window.currentUser = null;
         window.currentProfile = null;
-        window.selectedColor = 'purple';
+        window.selectedColor = 'red';
         window.isEditing = false;
 
         // Social platforms
@@ -768,10 +776,15 @@
                     
                     // Generate URL if it's not already a full URL
                     if (!urlInput.startsWith('http://') && !urlInput.startsWith('https://')) {
-                        if (platform !== 'custom' && platform !== 'facebook') {
+                        if (platform === 'custom' || platform === 'facebook') {
+                            // For custom/facebook, auto-add https:// if it looks like a domain
+                            if (urlInput.includes('.') && !urlInput.startsWith('http')) {
+                                finalURL = `https://${urlInput}`;
+                            }
+                        } else {
+                            // For other platforms, generate the URL
                             const cleanUsername = urlInput.replace(/^@/, '');
                             
-                            // Generate URL based on platform
                             switch(platform) {
                                 case 'tiktok':
                                     finalURL = `https://tiktok.com/@${cleanUsername}`;
@@ -869,6 +882,7 @@
             
             const displayName = document.getElementById('displayName').value.trim();
             const newUsername = document.getElementById('username').value.trim().toLowerCase();
+            const bio = document.getElementById('profileBio').value.trim();
             
             if (!displayName || !newUsername) {
                 alert('Please fill in all required fields.');
@@ -894,6 +908,7 @@
                     userId: window.currentUser.uid,
                     displayName: displayName,
                     username: newUsername,
+                    bio: bio,
                     backgroundColor: window.selectedColor,
                     profilePicture: profilePic,
                     links: links,
@@ -969,6 +984,10 @@
                     
                     document.getElementById('displayName').value = data.displayName || '';
                     document.getElementById('username').value = data.username || '';
+                    document.getElementById('profileBio').value = data.bio || '';
+                    
+                    // Update bio character count
+                    updateBioCharCount();
                     
                     if (data.profilePicture) {
                         document.getElementById('previewPic').src = data.profilePicture;
@@ -984,6 +1003,22 @@
             }
         };
 
+        // Bio character counter
+        function updateBioCharCount() {
+            const bioText = document.getElementById('profileBio').value;
+            const charCount = document.getElementById('bioCharCount');
+            charCount.textContent = bioText.length;
+            
+            // Change color based on limit
+            if (bioText.length > 130) {
+                charCount.style.color = '#ff6b6b';
+            } else if (bioText.length > 100) {
+                charCount.style.color = '#feca57';
+            } else {
+                charCount.style.color = '#26de81';
+            }
+        }
+
         // Color selection event listeners
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.color-option').forEach(option => {
@@ -992,6 +1027,10 @@
                     window.updateColorSelection();
                 });
             });
+
+            // Bio character counter
+            const bioTextarea = document.getElementById('profileBio');
+            bioTextarea.addEventListener('input', updateBioCharCount);
 
             // Add initial link if none exist
             setTimeout(() => {
