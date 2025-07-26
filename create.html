@@ -423,7 +423,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut as firebaseSignOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAvcAd9o-HGRGRpW4b-gocl11vVrXiONvU",
@@ -533,10 +533,16 @@
             
             try {
                 const usernameDoc = await getDoc(doc(db, 'usernames', username));
-                if (usernameDoc.exists() && window.currentProfile?.username !== username) {
-                    return false;
+                
+                // If username doesn't exist, it's available
+                if (!usernameDoc.exists()) {
+                    return true;
                 }
-                return true;
+                
+                // If it exists but belongs to current user, it's available (they're keeping their username)
+                const ownedByCurrentUser = usernameDoc.data().userId === window.currentUser?.uid;
+                return ownedByCurrentUser;
+                
             } catch (error) {
                 console.error('Error checking username:', error);
                 return false;
@@ -760,19 +766,19 @@
             }
             
             const displayName = document.getElementById('displayName').value.trim();
-            const username = document.getElementById('username').value.trim().toLowerCase();
+            const newUsername = document.getElementById('username').value.trim().toLowerCase();
             
-            if (!displayName || !username) {
+            if (!displayName || !newUsername) {
                 alert('Please fill in all required fields.');
                 return;
             }
             
-            if (reservedUsernames.includes(username)) {
+            if (reservedUsernames.includes(newUsername)) {
                 alert('This username is reserved. Please choose another.');
                 return;
             }
             
-            if (!(await window.isUsernameAvailable(username))) {
+            if (!(await window.isUsernameAvailable(newUsername))) {
                 alert('Username is already taken. Please choose another.');
                 return;
             }
@@ -780,11 +786,12 @@
             try {
                 const links = window.collectLinksFromEditor();
                 const profilePic = document.getElementById('previewPic').src;
+                const oldUsername = window.currentProfile?.username;
                 
                 const profileData = {
                     userId: window.currentUser.uid,
                     displayName: displayName,
-                    username: username,
+                    username: newUsername,
                     backgroundColor: window.selectedColor,
                     profilePicture: profilePic,
                     links: links,
@@ -793,11 +800,35 @@
                     updatedAt: new Date()
                 };
                 
+                // Start a batch operation for atomic updates
+                const batch = [];
+                
+                // 1. Update the profile document
                 await setDoc(doc(db, 'profiles', window.currentUser.uid), profileData);
-                await setDoc(doc(db, 'usernames', username), { userId: window.currentUser.uid });
+                
+                // 2. Set the new username document
+                await setDoc(doc(db, 'usernames', newUsername), { userId: window.currentUser.uid });
+                
+                // 3. If username changed, delete the old username document
+                if (oldUsername && oldUsername !== newUsername) {
+                    console.log(`Username changed from ${oldUsername} to ${newUsername}, freeing up old username`);
+                    try {
+                        // Delete the old username document to make it available
+                        await deleteDoc(doc(db, 'usernames', oldUsername));
+                        console.log(`Old username ${oldUsername} is now available for others`);
+                    } catch (error) {
+                        console.error('Error deleting old username:', error);
+                        // Don't fail the whole operation if this fails
+                    }
+                }
                 
                 window.currentProfile = profileData;
                 alert('Profile saved successfully!');
+                
+                // Update page title to reflect edit mode
+                document.getElementById('pageTitle').textContent = 'Edit Your Bio Link';
+                document.getElementById('pageSubtitle').textContent = 'Update your profile and social links';
+                window.isEditing = true;
                 
             } catch (error) {
                 console.error('Error saving profile:', error);
