@@ -604,6 +604,8 @@
             const generatedUrlDiv = linkItem.querySelector('.generated-url');
             const finalUrlSpan = linkItem.querySelector('.final-url');
             
+            console.log('generatePlatformURL called with:', { platform, userInput, platformURLs: window.platformURLs });
+            
             if (!userInput) {
                 generatedUrlDiv.style.display = 'none';
                 return;
@@ -632,14 +634,17 @@
             }
             
             // Generate URL for other platforms
-            if (window.platformURLs[platform]) {
+            if (window.platformURLs && window.platformURLs[platform]) {
+                console.log('Generating URL for platform:', platform);
                 // Clean username (remove @ if present)
                 const cleanUsername = userInput.replace(/^@/, '');
                 const generatedURL = window.platformURLs[platform](cleanUsername);
+                console.log('Generated URL:', generatedURL);
                 finalUrlSpan.textContent = generatedURL;
                 generatedUrlDiv.style.display = 'block';
                 input.style.borderColor = '#26de81'; // Green border for valid
             } else {
+                console.log('No URL generator found for platform:', platform);
                 generatedUrlDiv.style.display = 'none';
             }
         };
