@@ -1,6 +1,4 @@
-<div class="action-buttons">
-                <button class="save-btn" onclick="saveProfile()">Save Profile</button>
-                <button class="                        <div class="color-option bg-pink" data-color="pink"></div><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -136,11 +134,6 @@
 
         .header {
             text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .header {
-            text-align: center;
             margin-bottom: 2rem;
         }
 
@@ -149,26 +142,7 @@
             height: auto;
         }
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 900;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
-        }
-
-        .header p {
-            opacity: 0.9;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
         .editor-container {
-            max-width: 700px;
-            margin: 0 auto;
             background: rgba(0, 0, 0, 0.9);
             border-radius: 15px;
             padding: 2.5rem;
@@ -229,6 +203,7 @@
             margin-top: 0.5rem;
             font-size: 0.9rem;
             min-height: 20px;
+            color: white;
         }
 
         .profile-pic-section {
@@ -262,7 +237,7 @@
         }
 
         .file-input-label {
-            background: linear-gradient(45deg, #48dbfb, #0abde3);
+            background: #48dbfb;
             color: white;
             padding: 0.8rem 1.5rem;
             border-radius: 8px;
@@ -270,10 +245,11 @@
             transition: all 0.3s ease;
             display: inline-block;
             font-weight: 600;
+            border: 2px solid #333;
         }
 
         .file-input-label:hover {
-            transform: translateY(-2px);
+            background: #0abde3;
         }
 
         .color-palette {
@@ -307,25 +283,40 @@
             margin-top: 1rem;
         }
 
+        #linksList {
+            min-height: 100px;
+        }
+
         .link-item {
-            background: #fff;
+            background: #1a1a1a;
             border-radius: 10px;
             padding: 1.5rem;
             margin-bottom: 1rem;
-            border: 2px solid #000;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #666;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            cursor: move;
+            transition: all 0.3s ease;
+        }
+
+        .link-item:hover {
+            border-color: #888;
+        }
+
+        .link-item.dragging {
+            opacity: 0.5;
+            transform: rotate(2deg);
         }
 
         .link-header {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 1rem;
         }
 
         .link-number {
-            background: #000;
-            color: white;
+            background: white;
+            color: black;
             width: 30px;
             height: 30px;
             border-radius: 50%;
@@ -336,9 +327,20 @@
             font-size: 0.9rem;
         }
 
+        .drag-handle {
+            cursor: grab;
+            font-size: 1.2rem;
+            color: #888;
+            padding: 0.5rem;
+        }
+
+        .drag-handle:hover {
+            color: white;
+        }
+
         .remove-link {
             background: #ff6b6b;
-            border: 2px solid #000;
+            border: 2px solid #333;
             color: white;
             padding: 0.5rem 0.8rem;
             border-radius: 6px;
@@ -358,12 +360,19 @@
         }
 
         .link-inputs input, .link-inputs select {
-            background: #f8f8f8;
-            border: 2px solid #000;
+            background: #2a2a2a;
+            border: 2px solid #666;
             padding: 0.8rem;
             border-radius: 6px;
-            color: #333;
+            color: white;
             font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .generated-url {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #26de81;
             font-weight: 500;
         }
 
@@ -390,6 +399,7 @@
             gap: 1rem;
             justify-content: center;
             margin-top: 3rem;
+            flex-wrap: wrap;
         }
 
         .save-btn, .view-profile-btn, .sign-out-btn, .home-btn {
@@ -439,12 +449,12 @@
         }
 
         /* Background color classes */
+        .bg-red { background: linear-gradient(135deg, #ff6348 0%, #ff7675 100%); }
         .bg-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
         .bg-pink { background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%); }
         .bg-blue { background: linear-gradient(135deg, #48dbfb 0%, #0abde3 100%); }
         .bg-green { background: linear-gradient(135deg, #26de81 0%, #20bf6b 100%); }
         .bg-orange { background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%); }
-        .bg-red { background: linear-gradient(135deg, #ff6348 0%, #ff7675 100%); }
         .bg-teal { background: linear-gradient(135deg, #00d2d3 0%, #54a0ff 100%); }
         .bg-indigo { background: linear-gradient(135deg, #5f27cd 0%, #341f97 100%); }
         .bg-yellow { background: linear-gradient(135deg, #f9ca24 0%, #f0932b 100%); }
@@ -504,7 +514,7 @@
 
                 <div class="form-group">
                     <label>Bio</label>
-                    <textarea id="profileBio" placeholder="Tell people about yourself..." maxlength="150" rows="3" style="width: 100%; padding: 0.8rem; border: 2px solid #666; border-radius: 6px; background: #2a2a2a; color: white; font-size: 1rem; resize: vertical; font-family: inherit; font-weight: 500;"></textarea>
+                    <textarea id="profileBio" placeholder="Tell people about yourself..." maxlength="150" rows="3"></textarea>
                     <div style="font-size: 0.8rem; margin-top: 0.5rem; text-align: right; color: white; font-weight: 500;">
                         <span id="bioCharCount">0</span>/150 characters
                     </div>
@@ -519,12 +529,12 @@
                 <div class="form-group">
                     <label>Background Color</label>
                     <div class="color-palette">
-                        <div class="color-option bg-purple selected" data-color="purple" title="Purple"></div>
+                        <div class="color-option bg-red selected" data-color="red" title="Red"></div>
+                        <div class="color-option bg-purple" data-color="purple" title="Purple"></div>
                         <div class="color-option bg-pink" data-color="pink" title="Pink"></div>
                         <div class="color-option bg-blue" data-color="blue" title="Blue"></div>
                         <div class="color-option bg-green" data-color="green" title="Green"></div>
                         <div class="color-option bg-orange" data-color="orange" title="Orange"></div>
-                        <div class="color-option bg-red" data-color="red" title="Red"></div>
                         <div class="color-option bg-teal" data-color="teal" title="Teal"></div>
                         <div class="color-option bg-indigo" data-color="indigo" title="Indigo"></div>
                         <div class="color-option bg-yellow" data-color="yellow" title="Yellow"></div>
@@ -562,652 +572,4 @@
         import { getFirestore, doc, setDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyAvcAd9o-HGRGRpW4b-gocl11vVrXiONvU",
-            authDomain: "furgusbio.firebaseapp.com",
-            projectId: "furgusbio",
-            storageBucket: "furgusbio.firebasestorage.app",
-            messagingSenderId: "175548520637",
-            appId: "1:175548520637:web:1690b607d8647f40247fd4",
-            measurementId: "G-DXTSKVPV7S"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        // Global variables
-        window.currentUser = null;
-        window.currentProfile = null;
-        window.selectedColor = 'red';
-        window.isEditing = false;
-
-        // Social platforms
-        window.socialPlatforms = {
-            'custom': 'Custom Website',
-            'tiktok': 'TikTok',
-            'twitter': 'Twitter/X',
-            'instagram': 'Instagram',
-            'facebook': 'Facebook',
-            'snapchat': 'Snapchat',
-            'pinterest': 'Pinterest',
-            'reddit': 'Reddit',
-            'bluesky': 'Bluesky',
-            'github': 'GitHub',
-            'youtube': 'YouTube',
-            'linkedin': 'LinkedIn',
-            'discord': 'Discord',
-            'twitch': 'Twitch',
-            'telegram': 'Telegram'
-        };
-
-        // Reserved usernames
-        const reservedUsernames = [
-            'bio', 'docs', 'website', 'pricing', 'sponsors', '404', 'rate', 
-            'graphic', 'wc', 'gd', 'bl', 'founder', 'info', 'main', 'home',
-            'admin', 'api', 'www', 'mail', 'ftp', 'support', 'help', 'create', 'auth'
-        ];
-
-        // Check if editing existing profile
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('edit') === 'true') {
-            window.isEditing = true;
-            document.getElementById('pageTitle').textContent = 'Edit Your Bio Link';
-            document.getElementById('pageSubtitle').textContent = 'Update your profile and social links';
-        }
-
-        // Profile picture upload
-        window.handleProfilePicUpload = function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            if (file.size > 2 * 1024 * 1024) {
-                alert('File size must be less than 2MB');
-                return;
-            }
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                const img = new Image();
-                
-                img.onload = function() {
-                    const maxSize = 200;
-                    let { width, height } = img;
-                    
-                    if (width > height) {
-                        if (width > maxSize) {
-                            height = height * (maxSize / width);
-                            width = maxSize;
-                        }
-                    } else {
-                        if (height > maxSize) {
-                            width = width * (maxSize / height);
-                            height = maxSize;
-                        }
-                    }
-                    
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    const webpDataUrl = canvas.toDataURL('image/webp', 0.8);
-                    document.getElementById('previewPic').src = webpDataUrl;
-                };
-                
-                img.src = e.target.result;
-            };
-            
-            reader.readAsDataURL(file);
-        };
-
-        // Username validation
-        window.isUsernameAvailable = async function(username) {
-            if (!username || username.length < 3 || username.length > 30) return false;
-            if (!/^[a-zA-Z0-9_-]+$/.test(username)) return false;
-            if (reservedUsernames.includes(username)) return false;
-            
-            try {
-                const usernameDoc = await getDoc(doc(db, 'usernames', username));
-                
-                // If username doesn't exist, it's available
-                if (!usernameDoc.exists()) {
-                    return true;
-                }
-                
-                // If it exists but belongs to current user, it's available (they're keeping their username)
-                const ownedByCurrentUser = usernameDoc.data().userId === window.currentUser?.uid;
-                return ownedByCurrentUser;
-                
-            } catch (error) {
-                console.error('Error checking username:', error);
-                return false;
-            }
-        };
-
-        window.checkUsernameAvailability = async function() {
-            const username = document.getElementById('username').value.trim().toLowerCase();
-            const statusEl = document.getElementById('usernameStatus');
-            
-            if (!username) {
-                statusEl.innerHTML = '';
-                return;
-            }
-            
-            const available = await window.isUsernameAvailable(username);
-            if (available) {
-                statusEl.innerHTML = '<span style="color: #26de81;">✓ Available</span>';
-            } else {
-                statusEl.innerHTML = '<span style="color: #ff6b6b;">✗ Not available</span>';
-            }
-        };
-
-        // Link management
-        window.addLinkItem = function() {
-            const linksList = document.getElementById('linksList');
-            const linkNumber = linksList.children.length + 1;
-            
-            const linkItem = document.createElement('div');
-            linkItem.className = 'link-item';
-            
-            linkItem.innerHTML = `
-                <div class="link-header">
-                    <div class="link-number">${linkNumber}</div>
-                    <button class="remove-link" onclick="removeLinkItem(this)">Remove</button>
-                </div>
-                <div class="link-inputs">
-                    <input type="text" placeholder="Link Title" class="link-title-input" maxlength="50">
-                    <select class="link-platform-select" onchange="handlePlatformChange(this)">
-                        ${Object.entries(window.socialPlatforms).map(([key, value]) => 
-                            `<option value="${key}">${value}</option>`
-                        ).join('')}
-                    </select>
-                    <input type="text" placeholder="Username or Full URL" class="link-url-input" onblur="generatePlatformURL(this)">
-                </div>
-                <div class="generated-url" style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.7; display: none;">
-                    Final URL: <span class="final-url"></span>
-                </div>
-            `;
-            
-            linksList.appendChild(linkItem);
-            updateLinkNumbers();
-        };
-
-        window.generatePlatformURL = function(input) {
-            const linkItem = input.closest('.link-item');
-            const platform = linkItem.querySelector('.link-platform-select').value;
-            const userInput = input.value.trim();
-            const generatedUrlDiv = linkItem.querySelector('.generated-url');
-            const finalUrlSpan = linkItem.querySelector('.final-url');
-            
-            if (!userInput) {
-                generatedUrlDiv.style.display = 'none';
-                return;
-            }
-            
-            // If it's already a full URL, keep it as is
-            if (userInput.startsWith('http://') || userInput.startsWith('https://')) {
-                finalUrlSpan.textContent = userInput;
-                generatedUrlDiv.style.display = 'block';
-                input.style.borderColor = '#26de81';
-                return;
-            }
-            
-            // If it's custom or facebook, require full URL or auto-add https://
-            if (platform === 'custom' || platform === 'facebook') {
-                let finalURL = userInput;
-                
-                // If they entered a domain like "polor.org", add https://
-                if (userInput.includes('.') && !userInput.startsWith('http')) {
-                    finalURL = `https://${userInput}`;
-                    input.style.borderColor = '#26de81';
-                    finalUrlSpan.textContent = finalURL;
-                    generatedUrlDiv.style.display = 'block';
-                    return;
-                } else if (!userInput.includes('.') && !userInput.startsWith('http')) {
-                    // If no domain extension, require full URL
-                    input.placeholder = 'Full URL required (https://example.com)';
-                    input.style.borderColor = '#ff6b6b';
-                    generatedUrlDiv.style.display = 'none';
-                    return;
-                } else {
-                    input.style.borderColor = '#26de81';
-                    finalUrlSpan.textContent = finalURL;
-                    generatedUrlDiv.style.display = 'block';
-                    return;
-                }
-            }
-            
-            // Generate URL based on platform - simple switch statement
-            let generatedURL = '';
-            const cleanUsername = userInput.replace(/^@/, '');
-            
-            switch(platform) {
-                case 'tiktok':
-                    generatedURL = `https://tiktok.com/@${cleanUsername}`;
-                    break;
-                case 'twitter':
-                    generatedURL = `https://twitter.com/${cleanUsername}`;
-                    break;
-                case 'instagram':
-                    generatedURL = `https://instagram.com/${cleanUsername}`;
-                    break;
-                case 'snapchat':
-                    generatedURL = `https://snapchat.com/add/${cleanUsername}`;
-                    break;
-                case 'pinterest':
-                    generatedURL = `https://pinterest.com/${cleanUsername}`;
-                    break;
-                case 'reddit':
-                    generatedURL = `https://reddit.com/u/${cleanUsername}`;
-                    break;
-                case 'bluesky':
-                    generatedURL = `https://bsky.app/profile/${cleanUsername}`;
-                    break;
-                case 'github':
-                    generatedURL = `https://github.com/${cleanUsername}`;
-                    break;
-                case 'youtube':
-                    generatedURL = `https://youtube.com/@${cleanUsername}`;
-                    break;
-                case 'linkedin':
-                    generatedURL = `https://linkedin.com/in/${cleanUsername}`;
-                    break;
-                case 'discord':
-                    generatedURL = `https://discord.gg/${cleanUsername}`;
-                    break;
-                case 'twitch':
-                    generatedURL = `https://twitch.tv/${cleanUsername}`;
-                    break;
-                case 'telegram':
-                    generatedURL = `https://t.me/${cleanUsername}`;
-                    break;
-                default:
-                    generatedUrlDiv.style.display = 'none';
-                    return;
-            }
-            
-            if (generatedURL) {
-                finalUrlSpan.textContent = generatedURL;
-                generatedUrlDiv.style.display = 'block';
-                input.style.borderColor = '#26de81'; // Green border for valid
-            } else {
-                generatedUrlDiv.style.display = 'none';
-            }
-        };
-
-        window.removeLinkItem = function(button) {
-            button.closest('.link-item').remove();
-            updateLinkNumbers();
-        };
-
-        window.updateLinkNumbers = function() {
-            const linkItems = document.querySelectorAll('.link-item');
-            linkItems.forEach((item, index) => {
-                item.querySelector('.link-number').textContent = index + 1;
-            });
-        };
-
-        window.handlePlatformChange = function(select) {
-            const customCount = document.querySelectorAll('[data-platform="custom"]').length;
-            const currentItem = select.closest('.link-item');
-            const urlInput = currentItem.querySelector('.link-url-input');
-            
-            // Remove existing warning
-            const existingWarning = currentItem.querySelector('.custom-limit-warning');
-            if (existingWarning) {
-                existingWarning.remove();
-            }
-            
-            // Reset input styling
-            urlInput.style.borderColor = '';
-            
-            // Update placeholder based on platform
-            if (select.value === 'custom' || select.value === 'facebook') {
-                urlInput.placeholder = 'Full URL required (https://...)';
-            } else {
-                urlInput.placeholder = `Enter your ${window.socialPlatforms[select.value]} username`;
-            }
-            
-            if (select.value === 'custom') {
-                const otherCustomItems = Array.from(document.querySelectorAll('[data-platform="custom"]'))
-                    .filter(item => item !== currentItem);
-                
-                if (otherCustomItems.length >= 1) {
-                    const warning = document.createElement('div');
-                    warning.className = 'custom-limit-warning';
-                    warning.innerHTML = 'Only one custom website is allowed. <a href="/website" target="_blank" style="color: #feca57; text-decoration: underline;">Click here for more</a>';
-                    currentItem.appendChild(warning);
-                    select.value = 'tiktok';
-                    urlInput.placeholder = 'Enter your TikTok username';
-                    return;
-                }
-            }
-            
-            // Clear the URL input when platform changes
-            urlInput.value = '';
-            currentItem.querySelector('.generated-url').style.display = 'none';
-            currentItem.setAttribute('data-platform', select.value);
-        };
-
-        window.collectLinksFromEditor = function() {
-            const linkItems = document.querySelectorAll('.link-item');
-            const links = [];
-            
-            linkItems.forEach(item => {
-                const title = item.querySelector('.link-title-input').value.trim();
-                const urlInput = item.querySelector('.link-url-input').value.trim();
-                const platform = item.querySelector('.link-platform-select').value;
-                
-                if (title && urlInput) {
-                    let finalURL = urlInput;
-                    
-                    // Generate URL if it's not already a full URL
-                    if (!urlInput.startsWith('http://') && !urlInput.startsWith('https://')) {
-                        if (platform === 'custom' || platform === 'facebook') {
-                            // For custom/facebook, auto-add https:// if it looks like a domain
-                            if (urlInput.includes('.') && !urlInput.startsWith('http')) {
-                                finalURL = `https://${urlInput}`;
-                            }
-                        } else {
-                            // For other platforms, generate the URL
-                            const cleanUsername = urlInput.replace(/^@/, '');
-                            
-                            switch(platform) {
-                                case 'tiktok':
-                                    finalURL = `https://tiktok.com/@${cleanUsername}`;
-                                    break;
-                                case 'twitter':
-                                    finalURL = `https://twitter.com/${cleanUsername}`;
-                                    break;
-                                case 'instagram':
-                                    finalURL = `https://instagram.com/${cleanUsername}`;
-                                    break;
-                                case 'snapchat':
-                                    finalURL = `https://snapchat.com/add/${cleanUsername}`;
-                                    break;
-                                case 'pinterest':
-                                    finalURL = `https://pinterest.com/${cleanUsername}`;
-                                    break;
-                                case 'reddit':
-                                    finalURL = `https://reddit.com/u/${cleanUsername}`;
-                                    break;
-                                case 'bluesky':
-                                    finalURL = `https://bsky.app/profile/${cleanUsername}`;
-                                    break;
-                                case 'github':
-                                    finalURL = `https://github.com/${cleanUsername}`;
-                                    break;
-                                case 'youtube':
-                                    finalURL = `https://youtube.com/@${cleanUsername}`;
-                                    break;
-                                case 'linkedin':
-                                    finalURL = `https://linkedin.com/in/${cleanUsername}`;
-                                    break;
-                                case 'discord':
-                                    finalURL = `https://discord.gg/${cleanUsername}`;
-                                    break;
-                                case 'twitch':
-                                    finalURL = `https://twitch.tv/${cleanUsername}`;
-                                    break;
-                                case 'telegram':
-                                    finalURL = `https://t.me/${cleanUsername}`;
-                                    break;
-                                default:
-                                    // Keep original input if platform not recognized
-                                    finalURL = urlInput;
-                                    break;
-                            }
-                        }
-                    }
-                    
-                    links.push({ title, url: finalURL, platform });
-                }
-            });
-            
-            return links;
-        };
-
-        window.loadLinksInEditor = function(links) {
-            const linksList = document.getElementById('linksList');
-            linksList.innerHTML = '';
-            
-            links.forEach(link => {
-                window.addLinkItem();
-                const lastItem = linksList.lastElementChild;
-                lastItem.querySelector('.link-title-input').value = link.title;
-                
-                // For existing links, show the full URL
-                lastItem.querySelector('.link-url-input').value = link.url;
-                lastItem.querySelector('.link-platform-select').value = link.platform;
-                lastItem.setAttribute('data-platform', link.platform);
-                
-                // Show the final URL
-                const finalUrlSpan = lastItem.querySelector('.final-url');
-                const generatedUrlDiv = lastItem.querySelector('.generated-url');
-                finalUrlSpan.textContent = link.url;
-                generatedUrlDiv.style.display = 'block';
-            });
-        };
-
-        // Color selection
-        window.updateColorSelection = function() {
-            document.querySelectorAll('.color-option').forEach(option => {
-                option.classList.remove('selected');
-                if (option.dataset.color === window.selectedColor) {
-                    option.classList.add('selected');
-                }
-            });
-        };
-
-        // Save profile
-        window.saveProfile = async function() {
-            if (!window.currentUser) {
-                alert('Please sign in first');
-                window.location.href = '/auth.html';
-                return;
-            }
-            
-            const displayName = document.getElementById('displayName').value.trim();
-            const newUsername = document.getElementById('username').value.trim().toLowerCase();
-            const bio = document.getElementById('profileBio').value.trim();
-            
-            if (!displayName || !newUsername) {
-                alert('Please fill in all required fields.');
-                return;
-            }
-            
-            if (reservedUsernames.includes(newUsername)) {
-                alert('This username is reserved. Please choose another.');
-                return;
-            }
-            
-            if (!(await window.isUsernameAvailable(newUsername))) {
-                alert('Username is already taken. Please choose another.');
-                return;
-            }
-            
-            try {
-                const links = window.collectLinksFromEditor();
-                const profilePic = document.getElementById('previewPic').src;
-                const oldUsername = window.currentProfile?.username;
-                
-                const profileData = {
-                    userId: window.currentUser.uid,
-                    displayName: displayName,
-                    username: newUsername,
-                    bio: bio,
-                    backgroundColor: window.selectedColor,
-                    profilePicture: profilePic,
-                    links: links,
-                    likes: window.currentProfile?.likes || 0,
-                    createdAt: window.currentProfile?.createdAt || new Date(),
-                    updatedAt: new Date()
-                };
-                
-                // Start a batch operation for atomic updates
-                const batch = [];
-                
-                // 1. Update the profile document
-                await setDoc(doc(db, 'profiles', window.currentUser.uid), profileData);
-                
-                // 2. Set the new username document
-                await setDoc(doc(db, 'usernames', newUsername), { userId: window.currentUser.uid });
-                
-                // 3. If username changed, delete the old username document
-                if (oldUsername && oldUsername !== newUsername) {
-                    console.log(`Username changed from ${oldUsername} to ${newUsername}, freeing up old username`);
-                    try {
-                        // Delete the old username document to make it available
-                        await deleteDoc(doc(db, 'usernames', oldUsername));
-                        console.log(`Old username ${oldUsername} is now available for others`);
-                    } catch (error) {
-                        console.error('Error deleting old username:', error);
-                        // Don't fail the whole operation if this fails
-                    }
-                }
-                
-                window.currentProfile = profileData;
-                alert('Profile saved successfully!');
-                
-                // Update page title to reflect edit mode
-                document.getElementById('pageTitle').textContent = 'Edit Your Bio Link';
-                document.getElementById('pageSubtitle').textContent = 'Update your profile and social links';
-                window.isEditing = true;
-                
-            } catch (error) {
-                console.error('Error saving profile:', error);
-                alert('Error saving profile. Please try again.');
-            }
-        };
-
-        // View profile
-        window.viewProfile = function() {
-            if (window.currentProfile && window.currentProfile.username) {
-                window.open(`/${window.currentProfile.username}`, '_blank');
-            } else {
-                alert('Please save your profile first.');
-            }
-        };
-
-        // Sign out
-        window.signOut = async function() {
-            try {
-                await firebaseSignOut(auth);
-                window.location.href = '/auth.html';
-            } catch (error) {
-                console.error('Error signing out:', error);
-            }
-        };
-
-        // Load existing profile
-        window.loadUserProfile = async function() {
-            if (!window.currentUser) return;
-            
-            try {
-                const userDoc = await getDoc(doc(db, 'profiles', window.currentUser.uid));
-                if (userDoc.exists()) {
-                    const data = userDoc.data();
-                    window.currentProfile = data;
-                    
-                    document.getElementById('displayName').value = data.displayName || '';
-                    document.getElementById('username').value = data.username || '';
-                    document.getElementById('profileBio').value = data.bio || '';
-                    
-                    // Update bio character count
-                    updateBioCharCount();
-                    
-                    if (data.profilePicture) {
-                        document.getElementById('previewPic').src = data.profilePicture;
-                    }
-                    
-                    window.selectedColor = data.backgroundColor || 'purple';
-                    window.updateColorSelection();
-                    
-                    window.loadLinksInEditor(data.links || []);
-                }
-            } catch (error) {
-                console.error('Error loading profile:', error);
-            }
-        };
-
-        // Bio character counter
-        function updateBioCharCount() {
-            const bioText = document.getElementById('profileBio').value;
-            const charCount = document.getElementById('bioCharCount');
-            charCount.textContent = bioText.length;
-            
-            // Change color based on limit
-            if (bioText.length > 130) {
-                charCount.style.color = '#ff6b6b';
-            } else if (bioText.length > 100) {
-                charCount.style.color = '#feca57';
-            } else {
-                charCount.style.color = '#26de81';
-            }
-        }
-
-        // Color selection event listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.color-option').forEach(option => {
-                option.addEventListener('click', function() {
-                    window.selectedColor = this.dataset.color;
-                    window.updateColorSelection();
-                });
-            });
-
-            // Bio character counter
-            const bioTextarea = document.getElementById('profileBio');
-            bioTextarea.addEventListener('input', updateBioCharCount);
-
-            // Add initial link if none exist
-            setTimeout(() => {
-                if (document.getElementById('linksList').children.length === 0) {
-                    window.addLinkItem();
-                }
-            }, 100);
-        });
-
-        // Auth state listener
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                window.currentUser = user;
-                
-                // Check if user already has a profile
-                try {
-                    const userDoc = await getDoc(doc(db, 'profiles', user.uid));
-                    if (userDoc.exists()) {
-                        // User has existing profile - switch to edit mode
-                        window.isEditing = true;
-                        document.getElementById('pageTitle').textContent = 'Edit Your Bio Link';
-                        document.getElementById('pageSubtitle').textContent = 'Update your profile and social links';
-                        
-                        // Load existing profile data
-                        window.loadUserProfile();
-                    } else {
-                        // New user - pre-fill with Google account info
-                        document.getElementById('displayName').value = user.displayName || '';
-                        
-                        // Suggest username based on Google display name
-                        if (user.displayName) {
-                            const suggestedUsername = user.displayName.toLowerCase()
-                                .replace(/[^a-z0-9]/g, '')
-                                .substring(0, 20);
-                            document.getElementById('username').value = suggestedUsername;
-                            // Check availability of suggested username
-                            setTimeout(() => window.checkUsernameAvailability(), 500);
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error checking existing profile:', error);
-                    // Pre-fill with Google account info anyway
-                    document.getElementById('displayName').value = user.displayName || '';
-                }
-            } else {
-                // Not signed in - redirect to auth
-                window.location.href = '/auth.html';
-            }
-        });
-    </script>
-</body>
-</html>
+            apiKey: "AIzaSyAvcAd9o-HGRGRpW4b-gocl11vVrXiON
