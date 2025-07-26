@@ -632,10 +632,10 @@
             }
             
             // Generate URL for other platforms
-            if (window.platformURLs[platform]) {
+            if (platformURLs[platform]) {
                 // Clean username (remove @ if present)
                 const cleanUsername = userInput.replace(/^@/, '');
-                const generatedURL = window.platformURLs[platform](cleanUsername);
+                const generatedURL = platformURLs[platform](cleanUsername);
                 finalUrlSpan.textContent = generatedURL;
                 generatedUrlDiv.style.display = 'block';
                 input.style.borderColor = '#26de81'; // Green border for valid
@@ -674,7 +674,7 @@
             if (select.value === 'custom' || select.value === 'facebook') {
                 urlInput.placeholder = 'Full URL required (https://...)';
             } else {
-                urlInput.placeholder = `Enter your ${window.socialPlatforms[select.value]} username`;
+                urlInput.placeholder = `Enter your ${socialPlatforms[select.value]} username`;
             }
             
             if (select.value === 'custom') {
@@ -712,9 +712,9 @@
                     
                     // Generate URL if it's not already a full URL
                     if (!urlInput.startsWith('http://') && !urlInput.startsWith('https://')) {
-                        if (platform !== 'custom' && platform !== 'facebook' && window.platformURLs[platform]) {
+                        if (platform !== 'custom' && platform !== 'facebook' && platformURLs[platform]) {
                             const cleanUsername = urlInput.replace(/^@/, '');
-                            finalURL = window.platformURLs[platform](cleanUsername);
+                            finalURL = platformURLs[platform](cleanUsername);
                         }
                     }
                     
