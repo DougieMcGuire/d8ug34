@@ -1,303 +1,364 @@
-import React, { useState } from 'react';
-import { Plus, Trash2, Save, Upload, Eye } from 'lucide-react';
-
-const PolarQuizBuilder = () => {
-  const [quiz, setQuiz] = useState({
-    title: "",
-    description: "",
-    thumbnail: "",
-    questions: []
-  });
-
-  const [currentQuestion, setCurrentQuestion] = useState({
-    question: "",
-    imagePrompt: "",
-    answers: ["", "", "", ""],
-    correct: [],
-    description: ""
-  });
-
-  const addQuestion = () => {
-    if (currentQuestion.question.trim() === "") return;
-    
-    const newQuestion = {
-      ...currentQuestion,
-      image: `https://image.pollinations.ai/prompt/${encodeURIComponent(currentQuestion.imagePrompt)}?height=1100&width=2048`,
-      answers: currentQuestion.answers.filter(answer => answer.trim() !== "")
-    };
-    
-    setQuiz(prev => ({
-      ...prev,
-      questions: [...prev.questions, newQuestion]
-    }));
-    
-    // Reset form
-    setCurrentQuestion({
-      question: "",
-      imagePrompt: "",
-      answers: ["", "", "", ""],
-      correct: [],
-      description: ""
-    });
-  };
-
-  const removeQuestion = (index) => {
-    setQuiz(prev => ({
-      ...prev,
-      questions: prev.questions.filter((_, i) => i !== index)
-    }));
-  };
-
-  const updateAnswer = (index, value) => {
-    setCurrentQuestion(prev => ({
-      ...prev,
-      answers: prev.answers.map((answer, i) => i === index ? value : answer)
-    }));
-  };
-
-  const toggleCorrectAnswer = (index) => {
-    setCurrentQuestion(prev => ({
-      ...prev,
-      correct: prev.correct.includes(index) 
-        ? prev.correct.filter(i => i !== index)
-        : [...prev.correct, index]
-    }));
-  };
-
-  const generateJSON = () => {
-    const output = {
-      title: quiz.title,
-      description: quiz.description,
-      thumbnail: quiz.thumbnail,
-      questions: quiz.questions
-    };
-    
-    navigator.clipboard.writeText(JSON.stringify(output, null, 2));
-    alert("JSON copied to clipboard!");
-  };
-
-  const importJSON = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const imported = JSON.parse(e.target.result);
-          setQuiz(imported);
-        } catch (error) {
-          alert("Invalid JSON file");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polor Quiz Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .cropped-image {
+            object-fit: cover;
+            object-position: top;
         }
-      };
-      reader.readAsText(file);
-    }
-  };
-
-  return (
-    <div className="max-w-4xl mx-auto p-6 bg-white min-h-screen">
-      <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 rounded-lg mb-6">
-        <h1 className="text-3xl font-bold mb-2">🎯 Polor Quiz Builder</h1>
-        <p className="text-purple-100">Create engaging quiz games with AI-generated images</p>
-      </div>
-
-      {/* Quiz Info */}
-      <div className="bg-gray-50 p-6 rounded-lg mb-6">
-        <h2 className="text-xl font-semibold mb-4">Quiz Information</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            type="text"
-            placeholder="Quiz Title"
-            value={quiz.title}
-            onChange={(e) => setQuiz(prev => ({...prev, title: e.target.value}))}
-            className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-          <input
-            type="text"
-            placeholder="Thumbnail Image Prompt"
-            value={quiz.thumbnail}
-            onChange={(e) => setQuiz(prev => ({...prev, thumbnail: e.target.value}))}
-            className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
-        <textarea
-          placeholder="Quiz Description"
-          value={quiz.description}
-          onChange={(e) => setQuiz(prev => ({...prev, description: e.target.value}))}
-          className="w-full p-3 border rounded-lg mt-4 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          rows="2"
-        />
-      </div>
-
-      {/* Add Question Form */}
-      <div className="bg-blue-50 p-6 rounded-lg mb-6">
-        <h2 className="text-xl font-semibold mb-4">Add New Question</h2>
-        
-        <input
-          type="text"
-          placeholder="Question text"
-          value={currentQuestion.question}
-          onChange={(e) => setCurrentQuestion(prev => ({...prev, question: e.target.value}))}
-          className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <input
-            type="text"
-            placeholder="Image prompt (e.g., 'photosynthesis plant sunlight')"
-            value={currentQuestion.imagePrompt}
-            onChange={(e) => setCurrentQuestion(prev => ({...prev, imagePrompt: e.target.value}))}
-            className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-          <textarea
-            placeholder="Question description/explanation"
-            value={currentQuestion.description}
-            onChange={(e) => setCurrentQuestion(prev => ({...prev, description: e.target.value}))}
-            className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            rows="1"
-          />
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="max-w-4xl mx-auto p-6">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 rounded-lg mb-6">
+            <h1 class="text-3xl font-bold mb-2">🎯 Polor Quiz Builder</h1>
+            <p class="text-purple-100">Create engaging quiz games with AI-generated images</p>
         </div>
 
-        {/* Preview image if prompt exists */}
-        {currentQuestion.imagePrompt && (
-          <div className="mb-4">
-            <p className="text-sm text-gray-600 mb-2">Image Preview:</p>
-            <img 
-              src={`https://image.pollinations.ai/prompt/${encodeURIComponent(currentQuestion.imagePrompt)}?height=400&width=600`}
-              alt="Preview"
-              className="rounded-lg max-w-xs h-32 object-cover border"
-            />
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          {currentQuestion.answers.map((answer, index) => (
-            <div key={index} className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={currentQuestion.correct.includes(index)}
-                onChange={() => toggleCorrectAnswer(index)}
-                className="w-5 h-5 text-green-600"
-              />
-              <input
-                type="text"
-                placeholder={`Answer ${index + 1}`}
-                value={answer}
-                onChange={(e) => updateAnswer(index, e.target.value)}
-                className={`flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                  currentQuestion.correct.includes(index) ? 'bg-green-50 border-green-300' : ''
-                }`}
-              />
+        <!-- Quiz Info -->
+        <div class="bg-white p-6 rounded-lg shadow mb-6">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Quiz Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input
+                    type="text"
+                    id="quizTitle"
+                    placeholder="Quiz Title"
+                    class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <input
+                    type="text"
+                    id="thumbnailPrompt"
+                    placeholder="Thumbnail Image Prompt"
+                    class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
             </div>
-          ))}
+            <textarea
+                id="quizDescription"
+                placeholder="Quiz Description"
+                class="w-full p-3 border rounded-lg mt-4 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows="2"
+            ></textarea>
         </div>
 
-        <button
-          onClick={addQuestion}
-          className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors"
-        >
-          <Plus size={20} />
-          Add Question
-        </button>
-      </div>
+        <!-- Add Question Form -->
+        <div class="bg-blue-50 p-6 rounded-lg shadow mb-6">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Add New Question</h2>
+            
+            <input
+                type="text"
+                id="questionText"
+                placeholder="Question text"
+                class="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
 
-      {/* Questions List */}
-      <div className="bg-white border rounded-lg mb-6">
-        <div className="p-4 border-b bg-gray-50">
-          <h2 className="text-xl font-semibold">Questions ({quiz.questions.length})</h2>
-        </div>
-        
-        {quiz.questions.length === 0 ? (
-          <div className="p-8 text-center text-gray-500">
-            <p>No questions added yet. Create your first question above!</p>
-          </div>
-        ) : (
-          <div className="divide-y">
-            {quiz.questions.map((q, index) => (
-              <div key={index} className="p-4">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-medium text-lg">Q{index + 1}: {q.question}</h3>
-                  <button
-                    onClick={() => removeQuestion(index)}
-                    className="text-red-500 hover:text-red-700 p-1"
-                  >
-                    <Trash2 size={18} />
-                  </button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <input
+                    type="text"
+                    id="imagePrompt"
+                    placeholder="Image prompt (e.g., 'photosynthesis plant sunlight')"
+                    class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    oninput="updateImagePreview()"
+                />
+                <textarea
+                    id="questionDescription"
+                    placeholder="Question description/explanation"
+                    class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    rows="1"
+                ></textarea>
+            </div>
+
+            <!-- Image Preview -->
+            <div id="imagePreview" class="mb-4 hidden">
+                <p class="text-sm text-gray-600 mb-2">Image Preview:</p>
+                <img id="previewImg" class="rounded-lg max-w-xs h-32 object-cover border cropped-image" />
+            </div>
+
+            <!-- Answer Inputs -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="correct0" class="w-5 h-5 text-green-600" onchange="updateAnswerStyle(0)">
+                    <input type="text" id="answer0" placeholder="Answer 1" class="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
-                
-                {q.description && (
-                  <p className="text-gray-600 mb-2 text-sm">{q.description}</p>
-                )}
-                
-                {q.imagePrompt && (
-                  <img 
-                    src={q.image}
-                    alt="Question"
-                    className="w-32 h-20 object-cover rounded mb-2 border"
-                  />
-                )}
-                
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  {q.answers.map((answer, ansIndex) => (
-                    <div 
-                      key={ansIndex}
-                      className={`p-2 rounded ${
-                        q.correct.includes(ansIndex) 
-                          ? 'bg-green-100 text-green-800 font-medium' 
-                          : 'bg-gray-100'
-                      }`}
-                    >
-                      {answer}
-                    </div>
-                  ))}
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="correct1" class="w-5 h-5 text-green-600" onchange="updateAnswerStyle(1)">
+                    <input type="text" id="answer1" placeholder="Answer 2" class="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="correct2" class="w-5 h-5 text-green-600" onchange="updateAnswerStyle(2)">
+                    <input type="text" id="answer2" placeholder="Answer 3" class="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="correct3" class="w-5 h-5 text-green-600" onchange="updateAnswerStyle(3)">
+                    <input type="text" id="answer3" placeholder="Answer 4" class="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+            </div>
 
-      {/* Actions */}
-      <div className="flex flex-wrap gap-4">
-        <button
-          onClick={generateJSON}
-          disabled={quiz.questions.length === 0}
-          className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors"
-        >
-          <Save size={20} />
-          Copy JSON
-        </button>
-        
-        <label className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 cursor-pointer transition-colors">
-          <Upload size={20} />
-          Import JSON
-          <input
-            type="file"
-            accept=".json"
-            onChange={importJSON}
-            className="hidden"
-          />
-        </label>
-      </div>
-
-      {/* JSON Preview */}
-      {quiz.questions.length > 0 && (
-        <div className="mt-6 bg-gray-900 text-green-400 p-4 rounded-lg">
-          <h3 className="text-white mb-2 flex items-center gap-2">
-            <Eye size={18} />
-            JSON Preview
-          </h3>
-          <pre className="text-xs overflow-x-auto">
-{JSON.stringify({
-  title: quiz.title,
-  description: quiz.description,
-  thumbnail: quiz.thumbnail,
-  questions: quiz.questions.slice(0, 2) // Show first 2 questions
-}, null, 2)}
-{quiz.questions.length > 2 && "\n  // ... more questions"}
-          </pre>
+            <button
+                onclick="addQuestion()"
+                class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-colors"
+            >
+                ➕ Add Question
+            </button>
         </div>
-      )}
+
+        <!-- Questions List -->
+        <div class="bg-white rounded-lg shadow mb-6">
+            <div class="p-4 border-b bg-gray-50 rounded-t-lg">
+                <h2 class="text-xl font-semibold text-gray-800">Questions (<span id="questionCount">0</span>)</h2>
+            </div>
+            
+            <div id="questionsList" class="divide-y">
+                <div id="noQuestions" class="p-8 text-center text-gray-500">
+                    <p>No questions added yet. Create your first question above!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-wrap gap-4 mb-6">
+            <button
+                onclick="generateJSON()"
+                id="copyJsonBtn"
+                class="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg transition-colors"
+                disabled
+            >
+                💾 Copy JSON
+            </button>
+            
+            <label class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg cursor-pointer transition-colors">
+                📁 Import JSON
+                <input type="file" accept=".json" onchange="importJSON(event)" class="hidden">
+            </label>
+
+            <button
+                onclick="clearAll()"
+                class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-colors"
+            >
+                🗑️ Clear All
+            </button>
+        </div>
+
+        <!-- JSON Preview -->
+        <div id="jsonPreview" class="bg-gray-900 text-green-400 p-4 rounded-lg hidden">
+            <h3 class="text-white mb-2">👁️ JSON Preview</h3>
+            <pre id="jsonContent" class="text-xs overflow-x-auto"></pre>
+        </div>
     </div>
-  );
-};
 
-export default PolarQuizBuilder;
+    <script>
+        let quiz = {
+            title: "",
+            description: "",
+            thumbnail: "",
+            questions: []
+        };
+
+        function updateImagePreview() {
+            const prompt = document.getElementById('imagePrompt').value.trim();
+            const preview = document.getElementById('imagePreview');
+            const img = document.getElementById('previewImg');
+            
+            if (prompt) {
+                const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?height=400&width=600`;
+                img.src = url;
+                preview.classList.remove('hidden');
+            } else {
+                preview.classList.add('hidden');
+            }
+        }
+
+        function updateAnswerStyle(index) {
+            const checkbox = document.getElementById(`correct${index}`);
+            const input = document.getElementById(`answer${index}`);
+            
+            if (checkbox.checked) {
+                input.classList.add('bg-green-50', 'border-green-300');
+            } else {
+                input.classList.remove('bg-green-50', 'border-green-300');
+            }
+        }
+
+        function addQuestion() {
+            const questionText = document.getElementById('questionText').value.trim();
+            const imagePrompt = document.getElementById('imagePrompt').value.trim();
+            const description = document.getElementById('questionDescription').value.trim();
+            
+            if (!questionText) {
+                alert('Please enter a question');
+                return;
+            }
+
+            // Get answers and correct answers
+            const answers = [];
+            const correct = [];
+            
+            for (let i = 0; i < 4; i++) {
+                const answerText = document.getElementById(`answer${i}`).value.trim();
+                if (answerText) {
+                    answers.push(answerText);
+                    if (document.getElementById(`correct${i}`).checked) {
+                        correct.push(answers.length - 1);
+                    }
+                }
+            }
+
+            if (answers.length < 2) {
+                alert('Please provide at least 2 answers');
+                return;
+            }
+
+            if (correct.length === 0) {
+                alert('Please select at least one correct answer');
+                return;
+            }
+
+            // Create question object
+            const question = {
+                question: questionText,
+                imagePrompt: imagePrompt,
+                image: imagePrompt ? `https://image.pollinations.ai/prompt/${encodeURIComponent(imagePrompt)}?height=1100&width=2048` : "",
+                description: description,
+                answers: answers,
+                correct: correct
+            };
+
+            quiz.questions.push(question);
+            updateQuestionsList();
+            clearForm();
+            updateJsonPreview();
+        }
+
+        function removeQuestion(index) {
+            quiz.questions.splice(index, 1);
+            updateQuestionsList();
+            updateJsonPreview();
+        }
+
+        function updateQuestionsList() {
+            const list = document.getElementById('questionsList');
+            const noQuestions = document.getElementById('noQuestions');
+            const count = document.getElementById('questionCount');
+            const copyBtn = document.getElementById('copyJsonBtn');
+            
+            count.textContent = quiz.questions.length;
+            copyBtn.disabled = quiz.questions.length === 0;
+            
+            if (quiz.questions.length === 0) {
+                noQuestions.style.display = 'block';
+                return;
+            }
+            
+            noQuestions.style.display = 'none';
+            
+            list.innerHTML = quiz.questions.map((q, index) => `
+                <div class="p-4">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-medium text-lg text-gray-800">Q${index + 1}: ${q.question}</h3>
+                        <button onclick="removeQuestion(${index})" class="text-red-500 hover:text-red-700 p-1">
+                            🗑️
+                        </button>
+                    </div>
+                    
+                    ${q.description ? `<p class="text-gray-600 mb-2 text-sm">${q.description}</p>` : ''}
+                    
+                    ${q.imagePrompt ? `<img src="${q.image}" alt="Question" class="w-32 h-20 object-cover rounded mb-2 border cropped-image">` : ''}
+                    
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        ${q.answers.map((answer, ansIndex) => `
+                            <div class="p-2 rounded ${q.correct.includes(ansIndex) ? 'bg-green-100 text-green-800 font-medium' : 'bg-gray-100'}">
+                                ${answer}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function clearForm() {
+            document.getElementById('questionText').value = '';
+            document.getElementById('imagePrompt').value = '';
+            document.getElementById('questionDescription').value = '';
+            document.getElementById('imagePreview').classList.add('hidden');
+            
+            for (let i = 0; i < 4; i++) {
+                document.getElementById(`answer${i}`).value = '';
+                document.getElementById(`correct${i}`).checked = false;
+                updateAnswerStyle(i);
+            }
+        }
+
+        function generateJSON() {
+            quiz.title = document.getElementById('quizTitle').value.trim();
+            quiz.description = document.getElementById('quizDescription').value.trim();
+            quiz.thumbnail = document.getElementById('thumbnailPrompt').value.trim();
+            
+            const jsonOutput = JSON.stringify(quiz, null, 2);
+            navigator.clipboard.writeText(jsonOutput).then(() => {
+                alert('JSON copied to clipboard!');
+            });
+        }
+
+        function importJSON(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const imported = JSON.parse(e.target.result);
+                        quiz = imported;
+                        
+                        document.getElementById('quizTitle').value = quiz.title || '';
+                        document.getElementById('quizDescription').value = quiz.description || '';
+                        document.getElementById('thumbnailPrompt').value = quiz.thumbnail || '';
+                        
+                        updateQuestionsList();
+                        updateJsonPreview();
+                    } catch (error) {
+                        alert('Invalid JSON file');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function clearAll() {
+            if (confirm('Are you sure you want to clear everything?')) {
+                quiz = { title: "", description: "", thumbnail: "", questions: [] };
+                document.getElementById('quizTitle').value = '';
+                document.getElementById('quizDescription').value = '';
+                document.getElementById('thumbnailPrompt').value = '';
+                updateQuestionsList();
+                updateJsonPreview();
+                clearForm();
+            }
+        }
+
+        function updateJsonPreview() {
+            const preview = document.getElementById('jsonPreview');
+            const content = document.getElementById('jsonContent');
+            
+            if (quiz.questions.length > 0) {
+                quiz.title = document.getElementById('quizTitle').value.trim();
+                quiz.description = document.getElementById('quizDescription').value.trim();
+                quiz.thumbnail = document.getElementById('thumbnailPrompt').value.trim();
+                
+                const previewData = {
+                    ...quiz,
+                    questions: quiz.questions.slice(0, 2)
+                };
+                
+                content.textContent = JSON.stringify(previewData, null, 2) + 
+                    (quiz.questions.length > 2 ? '\n  // ... more questions' : '');
+                preview.classList.remove('hidden');
+            } else {
+                preview.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
