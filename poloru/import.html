@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polor Quiz Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="max-w-4xl mx-auto p-6">
+        <!-- Progress Bar -->
+        <div class="bg-white p-4 rounded-lg shadow mb-6">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-700">Progress</span>
+                <span class="text-sm font-medium text-gray-700"><span id="currentStep">1</span>/4</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+                <div id="progressBar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 25%"></div>
+            </div>
+            <div class="flex justify-between mt-2 text-xs text-gray-500">
+                <span>Import Notes</span>
+                <span>Question Count</span>
+                <span>Age Level</span>
+                <span>Generate Quiz</span>
+            </div>
+        </div>
+
+        <!-- Step 1: Import Notes -->
+        <div id="step1" class="step-content">
+            <div class="bg-gradient-to-r from-green-600 to-blue-600 text-white p-6 rounded-lg mb-6">
+                <h1 class="text-3xl font-bold mb-2">📝 Step 1: Import Your Notes</h1>
+                <p class="text-green-100">Paste your educational content to create an amazing quiz</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow mb-6">
+                <div class="mb-4">
+                    <label for="topicTitle" class="block text-sm font-medium text-gray-700 mb-2">Quiz Topic/Title</label>
+                    <input
+                        type="text"
+                        id="topicTitle"
+                        placeholder="e.g., Photosynthesis, American Revolution, Algebra"
+                        class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                </div>
+                
+                <div class="mb-6">
+                    <label for="notesInput" class="block text-sm font-medium text-gray-700 mb-2">Your Notes</label>
+                    <textarea
+                        id="notesInput"
+                        placeholder="Paste your study notes, lecture notes, textbook content, etc. here..."
+                        class="w-full p-4 border rounded-lg h-64 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    ></textarea>
+                    <p class="text-sm text-gray-500 mt-2">📋 The more detailed your notes, the better the quiz questions will be!</p>
+                </div>
+
+                <button onclick="nextStep()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors">
+                    Next: Choose Question Count →
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Question Count -->
+        <div id="step2" class="step-content hidden">
+            <div class="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6 rounded-lg mb-6">
+                <h1 class="text-3xl font-bold mb-2">🎯 Step 2: How Many Questions?</h1>
+                <p class="text-purple-100">Choose the perfect length for your quiz</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow mb-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="question-option p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors" data-count="10">
+                        <div class="text-center">
+                            <div class="text-2xl mb-2">⚡</div>
+                            <div class="font-semibold">10 Questions</div>
+                            <div class="text-sm text-gray-500">Quick Review</div>
+                        </div>
+                    </div>
+                    <div class="question-option p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors" data-count="15">
+                        <div class="text-center">
+                            <div class="text-2xl mb-2">🎯</div>
+                            <div class="font-semibold">15 Questions</div>
+                            <div class="text-sm text-gray-500">Standard Quiz</div>
+                        </div>
+                    </div>
+                    <div class="question-option p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors" data-count="20">
+                        <div class="text-center">
+                            <div class="text-2xl mb-2">📚</div>
+                            <div class="font-semibold">20 Questions</div>
+                            <div class="text-sm text-gray-500">Comprehensive</div>
+                        </div>
+                    </div>
+                    <div class="question-option p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors" data-count="25">
+                        <div class="text-center">
+                            <div class="text-2xl mb-2">🏆</div>
+                            <div class="font-semibold">25 Questions</div>
+                            <div class="text-sm text-gray-500">Full Test</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <button onclick="previousStep()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-colors">
+                        ← Back
+                    </button>
+                    <button onclick="nextStep()" id="nextStep2" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors opacity-50 cursor-not-allowed" disabled>
+                        Next: Choose Age Level →
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Age Level -->
+        <div id="step3" class="step-content hidden">
+            <div class="bg-gradient-to-r from-orange-600 to-red-600 text-white p-6 rounded-lg mb-6">
+                <h1 class="text-3xl font-bold mb-2">👥 Step 3: Target Age Level</h1>
+                <p class="text-orange-100">Who will be taking this quiz?</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="age-option p-6 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors" data-age="elementary">
+                        <div class="text-center">
+                            <div class="text-3xl mb-3">🧒</div>
+                            <div class="font-semibold text-lg">Elementary</div>
+                            <div class="text-sm text-gray-500 mt-2">Ages 6-11<br>Simple language, basic concepts</div>
+                        </div>
+                    </div>
+                    <div class="age-option p-6 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors" data-age="middle">
+                        <div class="text-center">
+                            <div class="text-3xl mb-3">🎓</div>
+                            <div class="font-semibold text-lg">Middle School</div>
+                            <div class="text-sm text-gray-500 mt-2">Ages 11-14<br>Moderate complexity, clear explanations</div>
+                        </div>
+                    </div>
+                    <div class="age-option p-6 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors" data-age="high">
+                        <div class="text-center">
+                            <div class="text-3xl mb-3">📖</div>
+                            <div class="font-semibold text-lg">High School</div>
+                            <div class="text-sm text-gray-500 mt-2">Ages 14-18<br>Advanced concepts, detailed analysis</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <button onclick="previousStep()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-colors">
+                        ← Back
+                    </button>
+                    <button onclick="nextStep()" id="nextStep3" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors opacity-50 cursor-not-allowed" disabled>
+                        Generate Quiz! 🚀
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Generate & Results -->
+        <div id="step4" class="step-content hidden">
+            <div class="bg-gradient-to-r from-green-600 to-teal-600 text-white p-6 rounded-lg mb-6">
+                <h1 class="text-3xl font-bold mb-2">🎉 Step 4: Your Quiz is Ready!</h1>
+                <p class="text-green-100">Generated with AI-powered question creation</p>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="bg-white p-8 rounded-lg shadow mb-6 text-center">
+                <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Generating Your Quiz...</h3>
+                <p class="text-gray-600">AI is creating questions from your notes</p>
+                <div class="mt-4 text-sm text-gray-500">
+                    <div id="loadingStep">Analyzing your notes...</div>
+                </div>
+            </div>
+
+            <!-- Results State -->
+            <div id="resultsState" class="hidden">
+                <div class="bg-white p-6 rounded-lg shadow mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800">📋 Generated Quiz JSON</h3>
+                        <div class="flex gap-2">
+                            <button onclick="copyJSON()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm transition-colors">
+                                📋 Copy JSON
+                            </button>
+                            <button onclick="downloadJSON()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm transition-colors">
+                                💾 Download
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg max-h-96 overflow-y-auto">
+                        <pre id="generatedJSON" class="text-sm whitespace-pre-wrap"></pre>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <button onclick="startOver()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-colors">
+                        🔄 Create Another Quiz
+                    </button>
+                    <button onclick="openInBuilder()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition-colors">
+                        ✏️ Edit in Quiz Builder
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let selectedQuestionCount = null;
+        let selectedAgeLevel = null;
+        let generatedQuizData = null;
+
+        function updateProgress() {
+            document.getElementById('currentStep').textContent = currentStep;
+            document.getElementById('progressBar').style.width = (currentStep / 4) * 100 + '%';
+        }
+
+        function nextStep() {
+            if (currentStep === 1) {
+                const topic = document.getElementById('topicTitle').value.trim();
+                const notes = document.getElementById('notesInput').value.trim();
+                
+                if (!topic || !notes) {
+                    alert('Please fill in both the topic and notes fields!');
+                    return;
+                }
+            }
+            
+            if (currentStep === 2 && !selectedQuestionCount) {
+                alert('Please select the number of questions!');
+                return;
+            }
+            
+            if (currentStep === 3 && !selectedAgeLevel) {
+                alert('Please select the target age level!');
+                return;
+            }
+
+            document.getElementById(`step${currentStep}`).classList.add('hidden');
+            currentStep++;
+            document.getElementById(`step${currentStep}`).classList.remove('hidden');
+            updateProgress();
+
+            if (currentStep === 4) {
+                generateQuiz();
+            }
+        }
+
+        function previousStep() {
+            document.getElementById(`step${currentStep}`).classList.add('hidden');
+            currentStep--;
+            document.getElementById(`step${currentStep}`).classList.remove('hidden');
+            updateProgress();
+        }
+
+        // Question count selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const questionOptions = document.querySelectorAll('.question-option');
+            questionOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    questionOptions.forEach(opt => opt.classList.remove('border-blue-500', 'bg-blue-50'));
+                    this.classList.add('border-blue-500', 'bg-blue-50');
+                    selectedQuestionCount = this.dataset.count;
+                    document.getElementById('nextStep2').disabled = false;
+                    document.getElementById('nextStep2').classList.remove('opacity-50', 'cursor-not-allowed');
+                });
+            });
+
+            // Age level selection
+            const ageOptions = document.querySelectorAll('.age-option');
+            ageOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    ageOptions.forEach(opt => opt.classList.remove('border-blue-500', 'bg-blue-50'));
+                    this.classList.add('border-blue-500', 'bg-blue-50');
+                    selectedAgeLevel = this.dataset.age;
+                    document.getElementById('nextStep3').disabled = false;
+                    document.getElementById('nextStep3').classList.remove('opacity-50', 'cursor-not-allowed');
+                });
+            });
+        });
+
+        async function generateQuiz() {
+            const topic = document.getElementById('topicTitle').value.trim();
+            const notes = document.getElementById('notesInput').value.trim();
+            
+            // Show loading steps
+            const loadingSteps = [
+                "Analyzing your notes...",
+                "Creating quiz questions...",
+                "Generating AI images...",
+                "Formatting JSON output...",
+                "Almost done!"
+            ];
+            
+            let stepIndex = 0;
+            const stepInterval = setInterval(() => {
+                if (stepIndex < loadingSteps.length) {
+                    document.getElementById('loadingStep').textContent = loadingSteps[stepIndex];
+                    stepIndex++;
+                }
+            }, 1000);
+
+            // Simulate API call to Pollinations
+            setTimeout(() => {
+                clearInterval(stepInterval);
+                
+                // Generate mock quiz JSON
+                const mockQuiz = generateMockQuiz(topic, selectedQuestionCount, selectedAgeLevel);
+                generatedQuizData = mockQuiz;
+                
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('resultsState').classList.remove('hidden');
+                document.getElementById('generatedJSON').textContent = JSON.stringify(mockQuiz, null, 2);
+            }, 5000);
+        }
+
+        function generateMockQuiz(topic, questionCount, ageLevel) {
+            // This would be replaced with actual API call to Pollinations
+            return {
+                "title": `${topic} Quiz`,
+                "description": `A comprehensive ${ageLevel} school quiz about ${topic}`,
+                "thumbnail": `cartoon style ${topic.toLowerCase()} educational illustration bold outlines no text`,
+                "questions": Array.from({length: parseInt(questionCount)}, (_, i) => ({
+                    "question": `Sample question ${i + 1} about ${topic}?`,
+                    "imagePrompt": `cartoon style ${topic.toLowerCase()} concept educational illustration bold outlines no text`,
+                    "image": `https://image.pollinations.ai/prompt/cartoon-style-${topic.toLowerCase()}-concept-educational-illustration-bold-outlines-no-text?height=1100&width=2048&nologo=True&token=Fr8eqI7m_NBgRN5Q`,
+                    "description": `This question tests understanding of ${topic} concepts`,
+                    "answers": ["Option A", "Option B", "Option C", "Option D"],
+                    "correct": [0]
+                }))
+            };
+        }
+
+        function copyJSON() {
+            const jsonText = document.getElementById('generatedJSON').textContent;
+            navigator.clipboard.writeText(jsonText).then(() => {
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        function downloadJSON() {
+            const jsonText = document.getElementById('generatedJSON').textContent;
+            const blob = new Blob([jsonText], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${document.getElementById('topicTitle').value.trim()}-quiz.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function startOver() {
+            currentStep = 1;
+            selectedQuestionCount = null;
+            selectedAgeLevel = null;
+            generatedQuizData = null;
+            
+            // Reset form fields
+            document.getElementById('topicTitle').value = '';
+            document.getElementById('notesInput').value = '';
+            
+            // Reset selections
+            document.querySelectorAll('.question-option').forEach(opt => {
+                opt.classList.remove('border-blue-500', 'bg-blue-50');
+            });
+            document.querySelectorAll('.age-option').forEach(opt => {
+                opt.classList.remove('border-blue-500', 'bg-blue-50');
+            });
+            
+            // Reset buttons
+            document.getElementById('nextStep2').disabled = true;
+            document.getElementById('nextStep2').classList.add('opacity-50', 'cursor-not-allowed');
+            document.getElementById('nextStep3').disabled = true;
+            document.getElementById('nextStep3').classList.add('opacity-50', 'cursor-not-allowed');
+            
+            // Show first step
+            document.querySelectorAll('.step-content').forEach(step => step.classList.add('hidden'));
+            document.getElementById('step1').classList.remove('hidden');
+            
+            updateProgress();
+        }
+
+        function openInBuilder() {
+            // This would redirect to the quiz builder page with the JSON pre-loaded
+            alert('This would open the Quiz Builder with your generated quiz loaded for editing!');
+        }
+    </script>
+</body>
+</html>
