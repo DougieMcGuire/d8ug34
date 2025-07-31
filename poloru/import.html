@@ -294,36 +294,120 @@
                     document.getElementById('loadingStep').textContent = loadingSteps[stepIndex];
                     stepIndex++;
                 }
-            }, 1000);
+            }, 1500);
 
-            // Simulate API call to Pollinations
-            setTimeout(() => {
-                clearInterval(stepInterval);
+            try {
+                // Create the AI prompt
+                const prompt = createAIPrompt(topic, notes, selectedQuestionCount, selectedAgeLevel);
                 
-                // Generate mock quiz JSON
-                const mockQuiz = generateMockQuiz(topic, selectedQuestionCount, selectedAgeLevel);
-                generatedQuizData = mockQuiz;
+                // Make actual API call to Pollinations
+                const response = await fetch('https://text.pollinations.ai/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        messages: [
+                            {
+                                role: "user",
+                                content: prompt
+                            }
+                        ],
+                        model: "openai"
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.text();
+                
+                // Try to parse the JSON response
+                let quizData;
+                try {
+                    // Remove any markdown formatting if present
+                    const cleanedResult = result.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+                    quizData = JSON.parse(cleanedResult);
+                } catch (parseError) {
+                    console.error('Failed to parse JSON:', parseError);
+                    throw new Error('Invalid JSON response from AI');
+                }
+
+                clearInterval(stepInterval);
+                generatedQuizData = quizData;
                 
                 document.getElementById('loadingState').classList.add('hidden');
                 document.getElementById('resultsState').classList.remove('hidden');
-                document.getElementById('generatedJSON').textContent = JSON.stringify(mockQuiz, null, 2);
-            }, 5000);
+                document.getElementById('generatedJSON').textContent = JSON.stringify(quizData, null, 2);
+
+            } catch (error) {
+                clearInterval(stepInterval);
+                console.error('Error generating quiz:', error);
+                
+                // Show error state
+                document.getElementById('loadingStep').textContent = 'Error generating quiz. Please try again.';
+                setTimeout(() => {
+                    document.getElementById('loadingState').classList.add('hidden');
+                    document.getElementById('resultsState').classList.remove('hidden');
+                    document.getElementById('generatedJSON').textContent = JSON.stringify({
+                        "error": "Failed to generate quiz",
+                        "message": error.message,
+                        "fallback": "Please check your notes and try again"
+                    }, null, 2);
+                }, 2000);
+            }
         }
 
-        function generateMockQuiz(topic, questionCount, ageLevel) {
-            // This would be replaced with actual API call to Pollinations
-            return {
-                "title": `${topic} Quiz`,
-                "description": `A comprehensive ${ageLevel} school quiz about ${topic}`,
-                "thumbnail": `cartoon style ${topic.toLowerCase()} educational illustration bold outlines no text`,
-                "questions": Array.from({length: parseInt(questionCount)}, (_, i) => ({
-                    "question": `Real question about ${topic}?`,
-                    "imagePrompt": `cartoon style ${topic.toLowerCase()} concept educational illustration bold outlines no text`,
-                    "image": `https://image.pollinations.ai/prompt/cartoon-style-${topic.toLowerCase()}-concept-educational-illustration-bold-outlines-no-text?height=1100&width=2048&nologo=True&token=Fr8eqI7m_NBgRN5Q`,
-                    "answers": ["Option A", "Option B", "Option C", "Option D"],
-                    "correct": [0]
-                }))
-            };
+        function createAIPrompt(topic, notes, questionCount, ageLevel) {
+            return `You are a quiz generator that creates educational content in a specific JSON format. Generate a comprehensive quiz set on "${topic}" with ${questionCount} questions based on the provided notes.
+
+**REQUIRED JSON FORMAT:**
+\`\`\`json
+{
+  "title": "Quiz Title Here",
+  "description": "Brief description of what this quiz covers",
+  "thumbnail": "cartoon style ${topic.toLowerCase()} educational illustration bold outlines no text",
+  "questions": [
+    {
+      "question": "What is the actual question being asked?",
+      "imagePrompt": "cartoon style [relevant visual description] educational illustration bold outlines no text",
+      "image": "https://image.pollinations.ai/prompt/[URL-ENCODED-PROMPT]?height=1100&width=2048&nologo=True&token=Fr8eqI7m_NBgRN5Q",
+      "answers": ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
+      "correct": [0]
+    }
+  ]
+}
+\`\`\`
+
+**STRICT REQUIREMENTS:**
+1. ALL imagePrompt values MUST start with "cartoon style" and end with "educational illustration bold outlines no text"
+2. ALL image URLs MUST use the exact format: \`https://image.pollinations.ai/prompt/[URL-ENCODED-PROMPT]?height=1100&width=2048&nologo=True&token=Fr8eqI7m_NBgRN5Q\`
+3. URL-encode the imagePrompt (spaces become %20, etc.)
+4. Each question needs 2-4 answer choices
+5. "correct" array contains indices of correct answers [0,1,2,3]
+6. Make questions age-appropriate for ${ageLevel} school
+7. Cover the topic comprehensively with varied question types
+8. DO NOT include "description" field in questions - remove it completely
+9. Questions must be REAL QUESTIONS about the content, not "Sample question X about [topic]"
+
+**IMAGE STYLE REQUIREMENTS:**
+- Always cartoon/illustration style (never realistic photos)
+- Bold outlines, educational, clean, appropriate for classrooms
+- Visual should relate to the question content
+- NO TEXT IN IMAGES (avoid words, sentences, signs with readable text)
+- Single letters or symbols are okay, but no readable words/phrases
+- Keep prompts descriptive but concise
+- Focus on visual elements, objects, scenes, not text-based content
+
+**SOURCE NOTES TO USE:**
+${notes}
+
+Create exactly ${questionCount} REAL QUESTIONS based on these notes. Each question should test specific knowledge from the content provided. DO NOT create generic "Sample question" placeholders - write actual educational questions that can be answered from the notes.
+
+NO "description" field in the JSON output.
+
+Respond with ONLY the valid JSON, no other text.`;
         }
 
         function copyJSON() {
