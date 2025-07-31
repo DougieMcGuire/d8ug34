@@ -317,10 +317,9 @@
                 "description": `A comprehensive ${ageLevel} school quiz about ${topic}`,
                 "thumbnail": `cartoon style ${topic.toLowerCase()} educational illustration bold outlines no text`,
                 "questions": Array.from({length: parseInt(questionCount)}, (_, i) => ({
-                    "question": `Sample question ${i + 1} about ${topic}?`,
+                    "question": `Real question about ${topic}?`,
                     "imagePrompt": `cartoon style ${topic.toLowerCase()} concept educational illustration bold outlines no text`,
                     "image": `https://image.pollinations.ai/prompt/cartoon-style-${topic.toLowerCase()}-concept-educational-illustration-bold-outlines-no-text?height=1100&width=2048&nologo=True&token=Fr8eqI7m_NBgRN5Q`,
-                    "description": `This question tests understanding of ${topic} concepts`,
                     "answers": ["Option A", "Option B", "Option C", "Option D"],
                     "correct": [0]
                 }))
